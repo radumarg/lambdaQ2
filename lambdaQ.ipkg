@@ -3,6 +3,7 @@ package lambdaQ
 sourcedir = "src"
 modules = Main,
           Quantum.Core,
-          Quantum.Gates
+          Quantum.Gates,
+          Quantum.Circuit
 main = Main
 executable = lambdaQ

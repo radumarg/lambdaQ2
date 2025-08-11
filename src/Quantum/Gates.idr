@@ -36,15 +36,22 @@ data Gate : Nat -> Type where
   U3    : Radians -> Radians -> Radians -> (q : Fin n) -> Gate n      -- U3(θ,φ,λ) == U(θ, φ, λ)
 
 -- 2-qubit (with a proof that control ≠ target)
-  CNOT  : (c,t : Fin n) -> {auto 0 neq : Not (c = t)} -> Gate n
+  CNOT : (c,t : Fin n) -> {auto 0 neq : Not (c = t)} -> Gate n
   CY    : (c,t : Fin n) -> {auto 0 neq : Not (c = t)} -> Gate n
   CZ    : (c,t : Fin n) -> {auto 0 neq : Not (c = t)} -> Gate n
   CH    : (c,t : Fin n) -> {auto 0 neq : Not (c = t)} -> Gate n
+  CS    : (c,t : Fin n) -> {auto 0 neq : Not (c = t)} -> Gate n
+  CSDG  : (c,t : Fin n) -> {auto 0 neq : Not (c = t)} -> Gate n
+  CT    : (c,t : Fin n) -> {auto 0 neq : Not (c = t)} -> Gate n
+  CTDG  : (c,t : Fin n) -> {auto 0 neq : Not (c = t)} -> Gate n
+  CSX   : (c,t : Fin n) -> {auto 0 neq : Not (c = t)} -> Gate n
+  CSXDG : (c,t : Fin n) -> {auto 0 neq : Not (c = t)} -> Gate n
 
   CRX   : Radians -> (c,t : Fin n) -> {auto 0 neq : Not (c = t)} -> Gate n
   CRY   : Radians -> (c,t : Fin n) -> {auto 0 neq : Not (c = t)} -> Gate n
   CRZ   : Radians -> (c,t : Fin n) -> {auto 0 neq : Not (c = t)} -> Gate n
   CU1   : Radians -> (c,t : Fin n) -> {auto 0 neq : Not (c = t)} -> Gate n
+  CU2   : Radians -> Radians -> (c,t : Fin n) -> {auto 0 neq : Not (c = t)} -> Gate n
   CU3   : Radians -> Radians -> Radians -> (c,t : Fin n) -> {auto 0 neq : Not (c = t)} -> Gate n
 
   SWAP  : (a,b : Fin n) -> {auto 0 neq : Not (a = b)} -> Gate n
