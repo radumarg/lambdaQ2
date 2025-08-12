@@ -36,20 +36,20 @@ t : {n : Nat} -> (q : Fin n) -> Circuit n n -> Circuit n n
 t q c = Seq c (GateApplication (T q))
 
 public export
-sDagger : {n : Nat} -> (q : Fin n) -> Circuit n n -> Circuit n n
-sDagger q c = Seq c (GateApplication (SDG q))
+sDag : {n : Nat} -> (q : Fin n) -> Circuit n n -> Circuit n n
+sDag q c = Seq c (GateApplication (SDG q))
 
 public export
-tDagger : {n : Nat} -> (q : Fin n) -> Circuit n n -> Circuit n n
-tDagger q c = Seq c (GateApplication (TDG q))
+tDag : {n : Nat} -> (q : Fin n) -> Circuit n n -> Circuit n n
+tDag q c = Seq c (GateApplication (TDG q))
 
 public export
 sx : {n : Nat} -> (q : Fin n) -> Circuit n n -> Circuit n n
 sx q c = Seq c (GateApplication (SX q))
 
 public export
-sxDagger : {n : Nat} -> (q : Fin n) -> Circuit n n -> Circuit n n
-sxDagger q c = Seq c (GateApplication (SXDG q))
+sxDag : {n : Nat} -> (q : Fin n) -> Circuit n n -> Circuit n n
+sxDag q c = Seq c (GateApplication (SXDG q))
 
 -- Rotation gates
 public export
@@ -107,24 +107,24 @@ ctrlS : {n : Nat} -> (c, t : Fin n) -> {auto 0 neq : Not (c = t)} -> Circuit n n
 ctrlS c t ckt = Seq ckt (GateApplication (CS c t))
 
 public export
-ctrlSDG : {n : Nat} -> (c, t : Fin n) -> {auto 0 neq : Not (c = t)} -> Circuit n n -> Circuit n n
-ctrlSDG c t ckt = Seq ckt (GateApplication (CSDG c t))
+ctrlSDag : {n : Nat} -> (c, t : Fin n) -> {auto 0 neq : Not (c = t)} -> Circuit n n -> Circuit n n
+ctrlSDag c t ckt = Seq ckt (GateApplication (CSDG c t))
 
 public export
 ctrlT : {n : Nat} -> (c, t : Fin n) -> {auto 0 neq : Not (c = t)} -> Circuit n n -> Circuit n n
 ctrlT c t ckt = Seq ckt (GateApplication (CT c t))
 
 public export
-ctrlTDG : {n : Nat} -> (c, t : Fin n) -> {auto 0 neq : Not (c = t)} -> Circuit n n -> Circuit n n
-ctrlTDG c t ckt = Seq ckt (GateApplication (CTDG c t))
+ctrlTDag : {n : Nat} -> (c, t : Fin n) -> {auto 0 neq : Not (c = t)} -> Circuit n n -> Circuit n n
+ctrlTDag c t ckt = Seq ckt (GateApplication (CTDG c t))
 
 public export
 ctrlSX : {n : Nat} -> (c, t : Fin n) -> {auto 0 neq : Not (c = t)} -> Circuit n n -> Circuit n n
 ctrlSX c t ckt = Seq ckt (GateApplication (CSX c t))
 
 public export
-ctrlSXDG : {n : Nat} -> (c, t : Fin n) -> {auto 0 neq : Not (c = t)} -> Circuit n n -> Circuit n n
-ctrlSXDG c t ckt = Seq ckt (GateApplication (CSXDG c t))
+ctrlSXDag : {n : Nat} -> (c, t : Fin n) -> {auto 0 neq : Not (c = t)} -> Circuit n n -> Circuit n n
+ctrlSXDag c t ckt = Seq ckt (GateApplication (CSXDG c t))
 
 -- ctrl rotation gates
 public export
