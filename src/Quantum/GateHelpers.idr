@@ -12,16 +12,16 @@ emptyCircuit : {n : Nat} -> Circuit n n
 emptyCircuit = Id
 
 public export
-pauliX : {n : Nat} -> (q : Fin n) -> Circuit n n -> Circuit n n
-pauliX q c = Seq c (GateApplication (X q))
+x : {n : Nat} -> (q : Fin n) -> Circuit n n -> Circuit n n
+x q c = Seq c (GateApplication (X q))
 
 public export
-pauliY : {n : Nat} -> (q : Fin n) -> Circuit n n -> Circuit n n
-pauliY q c = Seq c (GateApplication (Y q))
+y : {n : Nat} -> (q : Fin n) -> Circuit n n -> Circuit n n
+y q c = Seq c (GateApplication (Y q))
 
 public export
-pauliZ : {n : Nat} -> (q : Fin n) -> Circuit n n -> Circuit n n
-pauliZ q c = Seq c (GateApplication (Z q))
+z : {n : Nat} -> (q : Fin n) -> Circuit n n -> Circuit n n
+z q c = Seq c (GateApplication (Z q))
 
 public export
 hadamard : {n : Nat} -> (q : Fin n) -> Circuit n n -> Circuit n n
