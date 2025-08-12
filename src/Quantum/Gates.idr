@@ -1,13 +1,9 @@
 module Quantum.Gates
 
 import Data.Fin 
+import Quantum.Core
 
 %default total
-
-public export
-record Radians where
-  constructor MkRad
-  val : Double
 
 public export
 data Gate : Nat -> Type where

@@ -3,6 +3,11 @@ module Quantum.Core
 %default total
 
 public export
+record Radians where
+  constructor MkRad
+  val : Double
+
+public export
 Qubit : Type
 Qubit = Nat     -- wire label/index
 

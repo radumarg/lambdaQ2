@@ -4,6 +4,7 @@ sourcedir = "src"
 modules = Main,
           Quantum.Core,
           Quantum.Gates,
-          Quantum.Circuit
+          Quantum.Circuit,
+          Quantum.GateHelpers
 main = Main
 executable = lambdaQ

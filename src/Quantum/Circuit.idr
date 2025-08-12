@@ -11,7 +11,7 @@ data Circuit : Nat -> Nat -> Type where
   Id  : Circuit n n
 
   -- A single primitive gate
-  ApplyGate : Gate n -> Circuit n n
+  GateApplication : Gate n -> Circuit n n
 
   -- Sequential composition
   Seq : Circuit n m -> Circuit m k -> Circuit n k
