@@ -5,6 +5,7 @@ modules = Main,
           Quantum.Core,
           Quantum.Gates,
           Quantum.Circuit,
-          Quantum.GateHelpers
+          Quantum.GateHelpers,
+          Examples
 main = Main
 executable = lambdaQ
