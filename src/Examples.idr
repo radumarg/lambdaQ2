@@ -8,20 +8,22 @@ import Quantum.GateHelpers
 
 %default total
 
-infixl 0 |>
-(|>) : a -> (a -> b) -> b
-x |> f = f x
+q0 : Fin.Fin 3
+q0 = Fin.FZ
 
+q1 : Fin.Fin 3
+q1 = Fin.FS Fin.FZ
 
--- bellCircuit : Circuit 2 2
--- bellCircuit =
---   cnot FZ (FS FZ) {neq = NotThere NotHere} (hadamard FZ Empty)
+q2 : Fin.Fin 3
+q2 = Fin.FS (Fin.FS Fin.FZ)
 
--- example : Circuit 2 2
--- example =
---   emptyCircuit
---     |> hadamard FZ       -- put qubit 0 in superposition
---     |> cnot FZ (FS FZ)   -- control = qubit 0, target = qubit 1
+neq_q0_q1 : Not (Fin.FZ = Fin.FS Fin.FZ)
+neq_q0_q1 Refl impossible
 
--- myCircuit : Circuit 2 2
--- myCircuit = hadamard FZ (cnot FZ (FS FZ) emptyCircuit)
+build : Circuit 3 3
+build =
+  let c0 = emptyCircuit {n = 3}
+      c1 = hadamard q0 c0
+      c2 = x q1 c1
+      c3 = cnot q0 q1 {neq = neq_q0_q1} c2
+   in z q2 c3
