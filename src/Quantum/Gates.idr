@@ -1,7 +1,9 @@
 module Quantum.Gates
 
-import Data.Fin 
+import Data.Fin
+import Data.Vect
 import Quantum.Core
+import Quantum.Control
 
 %default total
 
@@ -68,6 +70,73 @@ data Gate : Nat -> Type where
         -> {auto 0 cb  : Not (c = b)}
         -> Gate n
 
+  -- Generic controlled wrapper:
+  --   cs = control wires,
+  --   bs = their required polarities (True = |1>, False = |0>)
+  --   inner = the original gate
+  Controlled :
+    {k : Nat} ->
+    (cs : Vect k (Fin n)) ->
+    (bs : Vect k Bool) -> 
+    (inner : Gate n) ->
+    {auto _ : AllDistinct cs} ->
+    Gate n
+
 public export
 CX : (c,t : Fin n) -> {auto 0 neq : Not (c = t)} -> Gate n
-CX = CNOT
+CX c t {neq} = CNOT c t {neq = neq}
+
+public export
+targets : Gate n -> (m ** Vect m (Fin n))
+targets (Id q)                    = (_ ** [q])
+targets (X q)                     = (_ ** [q])
+targets (Y q)                     = (_ ** [q])
+targets (Z q)                     = (_ ** [q])
+targets (H q)                     = (_ ** [q])
+targets (S q)                     = (_ ** [q])
+targets (SDG q)                   = (_ ** [q])
+targets (T q)                     = (_ ** [q])
+targets (TDG q)                   = (_ ** [q])
+targets (SX q)                    = (_ ** [q])
+targets (SXDG q)                  = (_ ** [q])
+targets (RX _ q)                  = (_ ** [q])
+targets (RY _ q)                  = (_ ** [q])
+targets (RZ _ q)                  = (_ ** [q])
+targets (U _ _ _ q)               = (_ ** [q])
+targets (U1 _ q)                  = (_ ** [q])
+targets (U2 _ _ q)                = (_ ** [q])
+targets (U3 _ _ _ q)              = (_ ** [q])
+targets (CNOT _ t)                = (_ ** [t])
+targets (CY _ t)                  = (_ ** [t])
+targets (CZ _ t)                  = (_ ** [t])
+targets (CH _ t)                  = (_ ** [t])
+targets (CS _ t)                  = (_ ** [t])
+targets (CSDG _ t)                = (_ ** [t])
+targets (CT _ t)                  = (_ ** [t])
+targets (CTDG _ t)                = (_ ** [t])
+targets (CSX _ t)                 = (_ ** [t])
+targets (CSXDG _ t)               = (_ ** [t])
+targets (CRX _ _ t)               = (_ ** [t])
+targets (CRY _ _ t)               = (_ ** [t])
+targets (CRZ _ _ t)               = (_ ** [t])
+targets (CU1 _ _ t)               = (_ ** [t])
+targets (CU2 _ _ _ t)             = (_ ** [t])
+targets (CU3 _ _ _ _ t)           = (_ ** [t])
+targets (SWAP a b)                = (_ ** [a, b])
+targets (RXX _ a b)               = (_ ** [a, b])
+targets (RYY _ a b)               = (_ ** [a, b])
+targets (RZZ _ a b)               = (_ ** [a, b])
+targets (RZX _ a b)               = (_ ** [a, b])
+targets (CCX _ _ t)               = (_ ** [t])
+targets (CSWAP _ a b)             = (_ ** [a, b])
+targets (Controlled _ _ inner)    = targets inner
+
+mkControlled :
+  {k : Nat} ->
+  (cs : Vect k (Fin n)) ->
+  (bs : Vect k Bool) ->
+  (inner : Gate n) ->
+  {auto distinct : AllDistinct cs} ->
+  {auto disj : Disjoint cs (snd (targets inner))} ->
+  Gate n
+mkControlled cs bs inner = Controlled cs bs inner
