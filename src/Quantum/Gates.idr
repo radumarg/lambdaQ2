@@ -70,6 +70,9 @@ data Gate : Nat -> Type where
         -> {auto 0 cb  : Not (c = b)}
         -> Gate n
 
+  Measure : (q : Fin n) -> Gate n
+  Reset : (q : Fin n) -> Gate n
+
   -- Generic controlled wrapper:
   --   cs = control wires,
   --   bs = their required polarities (True = |1>, False = |0>)
@@ -106,6 +109,8 @@ targets (U _ _ _ q)               = (_ ** [q])
 targets (U1 _ q)                  = (_ ** [q])
 targets (U2 _ _ q)                = (_ ** [q])
 targets (U3 _ _ _ q)              = (_ ** [q])
+targets (Measure q)               = (_ ** [q])
+targets (Reset q)                 = (_ ** [q])
 targets (CNOT _ t)                = (_ ** [t])
 targets (CY _ t)                  = (_ ** [t])
 targets (CZ _ t)                  = (_ ** [t])
