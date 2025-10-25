@@ -33,6 +33,10 @@ data Gate : Nat -> Type where
   U2    : Radians -> Radians -> (q : Fin n) -> Gate n                 -- U2(φ,λ) == U(π/2, φ, λ)
   U3    : Radians -> Radians -> Radians -> (q : Fin n) -> Gate n      -- U3(θ,φ,λ) == U(θ, φ, λ)
 
+  -- Additional operations
+  Measure : (q : Fin n) -> Gate n
+  Reset : (q : Fin n) -> Gate n
+
 -- 2-qubit (with a proof that control ≠ target)
   CNOT : (c,t : Fin n) -> {auto 0 neq : Not (c = t)} -> Gate n
   CY    : (c,t : Fin n) -> {auto 0 neq : Not (c = t)} -> Gate n
@@ -69,9 +73,6 @@ data Gate : Nat -> Type where
         -> {auto 0 ca  : Not (c = a)}
         -> {auto 0 cb  : Not (c = b)}
         -> Gate n
-
-  Measure : (q : Fin n) -> Gate n
-  Reset : (q : Fin n) -> Gate n
 
   -- Generic controlled wrapper:
   --   cs = control wires,

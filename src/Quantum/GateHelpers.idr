@@ -81,6 +81,15 @@ public export
 u3 : {n : Nat} -> Radians -> Radians -> Radians -> (q : Fin n) -> Circuit n n -> Circuit n n
 u3 theta phi lambda q circ = Seq circ (GateApplication (U3 theta phi lambda q))
 
+-- Additional operations
+public export
+measr : {n : Nat} -> (q : Fin n) -> Circuit n n -> Circuit n n
+measr q circ = Seq circ (GateApplication (Measure q))
+
+public export
+reset : {n : Nat} -> (q : Fin n) -> Circuit n n -> Circuit n n
+reset q circ = Seq circ (GateApplication (Reset q))
+
 -- Two-qubit gates
 public export
 cnot : {n : Nat} -> (c, t : Fin n) -> {auto 0 neq : Not (c = t)} -> Circuit n n -> Circuit n n
@@ -121,14 +130,6 @@ ctrlTDag c t circ = Seq circ (GateApplication (CTDG c t))
 public export
 ctrlSX : {n : Nat} -> (c, t : Fin n) -> {auto 0 neq : Not (c = t)} -> Circuit n n -> Circuit n n
 ctrlSX c t circ = Seq circ (GateApplication (CSX c t))
-
-public export
-measure : {n : Nat} -> (q : Fin n) -> Circuit n n -> Circuit n n
-measure q circ = Seq circ (GateApplication (Measure q))
-
-public export
-reset : {n : Nat} -> (q : Fin n) -> Circuit n n -> Circuit n n
-reset q circ = Seq circ (GateApplication (Reset q))
 
 public export
 ctrlSXDag : {n : Nat} -> (c, t : Fin n) -> {auto 0 neq : Not (c = t)} -> Circuit n n -> Circuit n n
