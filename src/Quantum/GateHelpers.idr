@@ -83,8 +83,8 @@ u3 theta phi lambda q circ = Seq circ (GateApplication (U3 theta phi lambda q))
 
 -- Additional operations
 public export
-measr : {n : Nat} -> (q : Fin n) -> Circuit n n -> Circuit n n
-measr q circ = Seq circ (GateApplication (Measure q))
+measure : {n : Nat} -> (q : Fin n) -> Circuit n n -> Circuit n n
+measure q circ = Seq circ (GateApplication (Measure q))
 
 public export
 reset : {n : Nat} -> (q : Fin n) -> Circuit n n -> Circuit n n
