@@ -142,7 +142,21 @@ mkControlled :
   (cs : Vect k (Fin n)) ->
   (bs : Vect k Bool) ->
   (inner : Gate n) ->
-  {auto distinct : AllDistinct cs} ->
-  {auto disj : Disjoint cs (snd (targets inner))} ->
+  {auto distinct : AllDistinct cs} ->                     -- keeps the control wires pairwise distinct
+  {auto disj : Disjoint cs (snd (targets inner))} ->      -- checks that none of those control wires overlap the targets
   Gate n
 mkControlled cs bs inner = Controlled cs bs inner
+
+
+  -- -- 1 control on |1⟩ (classic single control)
+  -- let g1 : Gate n = mkControlled [c] [True] (X t)
+  -- -- 1 control on |0⟩ (negative control)
+  -- let g2 : Gate n = mkControlled [c] [False] (H t)
+  -- -- 2 controls, mixed polarities
+  -- let g3 : Gate n = mkControlled [c1, c2] [True, False] (RZ theta t)
+  -- -- Add a control to a 2-qubit gate (e.g., controlled-SWAP)
+  -- let g4 : Gate n = mkControlled [c] [True] (SWAP a b)
+  -- -- Nesting: add another control later (e.g., build CCCX)
+  -- let g5 : Gate n = mkControlled [d] [True] (mkControlled [c] [True] (X t))
+  -- -- Controlled parametric gate (e.g., CU3)
+  -- let g6 : Gate n = mkControlled [c] [True] (U3 th ph lam t)

@@ -1,4 +1,4 @@
-module Quantum.Control
+module Quantum.ControlHelpers
 
 import Data.Vect
 import Data.Vect.Quantifiers as VQ

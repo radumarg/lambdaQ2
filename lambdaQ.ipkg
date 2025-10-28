@@ -5,6 +5,7 @@ modules = Main,
           Quantum.Core,
           Quantum.Gates,
           Quantum.Circuit,
+          Quantum.ControlHelpers,
           Quantum.Helpers,
           Quantum.GateHelpers,
           SampleCircuit
