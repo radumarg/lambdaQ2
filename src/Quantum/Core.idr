@@ -3,9 +3,22 @@ module Quantum.Core
 %default total
 
 public export
-record Radians where
-  constructor MkRad
-  val : Double
+data Radians = MkRadians Double
+
+public export
+Num Radians where
+  (+) (MkRadians x) (MkRadians y) = MkRadians (x + y)
+  (*) (MkRadians x) (MkRadians y) = MkRadians (x * y)
+  fromInteger i = MkRadians (cast i)
+
+public export
+Neg Radians where
+  negate (MkRadians x) = MkRadians (negate x)
+  (-) x y = x + negate y
+
+public export
+pi : Radians
+pi = MkRadians 3.141592653589793
 
 -- public export
 -- Qubit : Type

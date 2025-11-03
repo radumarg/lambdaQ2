@@ -32,22 +32,22 @@ build = c13
   -- 1-qubit gates
   c1  = hadamard q0 c0
   c2  = s q1 c1
-  c3  = rotY (MkRad 1.234) q2 c2
+  c3  = rotY (MkRadians 1.234) q2 c2
 
   -- 2-qubit, controlled rotations, and interactions
   c4  = case mkNeq q0 q1 of
     Just neq => cnot q0 q1 {neq = neq} c3
     Nothing  => panic "CNOT requires distinct wires"
   c5  = case mkNeq q1 q2 of
-    Just neq => ctrlRZ (MkRad 0.25) q1 q2 {neq = neq} c4
+    Just neq => ctrlRZ (MkRadians 0.25) q1 q2 {neq = neq} c4
     Nothing  => panic "ctrlRZ requires distinct wires"
   c6  = case mkNeq q2 q3 of
-    Just neq => rzx (MkRad 0.5) q2 q3 {neq = neq} c5
+    Just neq => rzx (MkRadians 0.5) q2 q3 {neq = neq} c5
     Nothing  => panic "rzx requires distinct wires"
   c7  = case mkNeq q3 q4 of
     Just neq => swap q3 q4 {neq = neq} c6
     Nothing  => panic "swap requires distinct wires"
-  c8  = u3 (MkRad 0.7) (MkRad 0.1) (MkRad 0.2) q4 c7
+  c8  = u3 (MkRadians 0.7) (MkRadians 0.1) (MkRadians 0.2) q4 c7
   c9  = case mkNeq q0 q4 of
     Just neq => ctrlSX q0 q4 {neq = neq} c8
     Nothing  => panic "ctrlSX requires distinct wires"
@@ -58,6 +58,6 @@ build = c13
 
   -- continue with unitary ops on unmeasured lines
   c12 = case mkNeq q1 q2 of
-    Just neq => rzz (MkRad 0.33) q1 q2 {neq = neq} c11
+    Just neq => rzz (MkRadians 0.33) q1 q2 {neq = neq} c11
     Nothing  => panic "rzz requires distinct wires"
   c13 = tDag q2 c12

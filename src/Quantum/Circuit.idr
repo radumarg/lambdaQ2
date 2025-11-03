@@ -24,3 +24,8 @@ data Circuit : Nat -> Nat -> Type where
 
   -- Add a new qubit initialized in |0⟩ or |1⟩
   Init : InitVal -> Circuit n (S n)
+
+public export
+power : (k : Nat) -> Circuit n n -> Circuit n n
+power Z     _ = Id
+power (S k) c = Seq c (power k c)
