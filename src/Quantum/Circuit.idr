@@ -4,6 +4,9 @@ import Quantum.Gates
 
 %default total
 
+public export
+data InitVal = Init0 | Init1
+
 -- Quantum circuits with n inputs and m outputs
 public export
 data Circuit : Nat -> Nat -> Type where
@@ -20,4 +23,4 @@ data Circuit : Nat -> Nat -> Type where
   Par : Circuit n1 m1 -> Circuit n2 m2 -> Circuit (n1 + n2) (m1 + m2)
 
   -- Add a new qubit initialized in |0⟩ or |1⟩
-  Init : Bool -> Circuit n (S n)
+  Init : InitVal -> Circuit n (S n)
