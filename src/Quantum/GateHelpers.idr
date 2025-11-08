@@ -224,7 +224,7 @@ ctrl cs bs inner distinct disjoint circ =
   let uCtrl : UnitaryGate n
       uCtrl = mkControlled cs bs inner
         {distinct = distinct}
-        {disj = disjoint}
+        {disjoint = disjoint}
   in Seq circ (GateApplication (UGate uCtrl))
 
 

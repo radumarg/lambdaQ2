@@ -149,8 +149,8 @@ mkControlled :
   (cs : Vect k (Fin n)) ->
   (bs : Vect k Bool) ->
   (inner : UnitaryGate n) ->
-  {auto distinct : AllDistinct cs} ->                             -- keeps the control wires pairwise distinct
-  {auto disj : Disjoint cs (snd (targetsUnitary inner))} ->       -- checks that none of those control wires overlap the targets
+  {auto distinct : AllDistinct cs} ->                                 -- keeps the control wires pairwise distinct
+  {auto disjoint : Disjoint cs (snd (targetsUnitary inner))} ->       -- checks that none of those control wires overlap the targets
   UnitaryGate n
 mkControlled cs bs inner = Controlled cs bs inner
 
