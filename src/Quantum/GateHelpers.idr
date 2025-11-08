@@ -1,8 +1,10 @@
 module Quantum.GateHelpers
 
 import Data.Fin
+import Data.Vect
 import Quantum.Gates
 import Quantum.Circuit
+import Quantum.Control
 import Quantum.Core
 
 %default total
@@ -205,3 +207,37 @@ fredkin : {n : Nat} -> (c, a, b : Fin n)
         -> {auto 0 cb  : Not (c = b)}
         -> Circuit n n -> Circuit n n
 fredkin c a b circ = Seq circ (GateApplication (UGate (CSWAP c a b)))
+
+-- Generic multi-controlled gate construction
+public export
+ctrl :
+  {n : Nat} ->
+  {k : Nat} ->
+  (cs : Vect k (Fin n)) ->           -- control wires
+  (bs : Vect k Bool) ->              -- required polarities (True = |1>, False = |0>)
+  (inner : UnitaryGate n) ->         -- gate to be controlled
+  (distinct : AllDistinct cs) ->
+  (disjoint : Disjoint cs (snd (targetsUnitary inner))) ->
+  Circuit n n ->
+  Circuit n n
+ctrl cs bs inner distinct disjoint circ =
+  let uCtrl : UnitaryGate n
+      uCtrl = mkControlled cs bs inner
+        {distinct = distinct}
+        {disj = disjoint}
+  in Seq circ (GateApplication (UGate uCtrl))
+
+
+-- exampleMixedCtrl :
+--   {n : Nat} ->
+--   (c1, c2, t : Fin n) ->
+--   Circuit n n ->
+--   Circuit n n
+-- exampleMixedCtrl c1 c2 t circ =
+--   let cs    : Vect 2 (Fin n)
+--       cs    = [c1, c2]
+--       bs    : Vect 2 Bool
+--       bs    = [True, False]      -- c1=1, c2=0
+--       inner : UnitaryGate n
+--       inner = RZ pi t
+--   in ctrl cs bs inner circ
