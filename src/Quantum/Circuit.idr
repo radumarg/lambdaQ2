@@ -25,7 +25,31 @@ data Circuit : Nat -> Nat -> Type where
   -- Add a new qubit initialized in |0⟩ or |1⟩
   Init : InitVal -> Circuit n (S n)
 
+-- Inverse of a circuit, if it exists
 public export
-power : (k : Nat) -> Circuit n n -> Circuit n n
-power Z     _ = Id
-power (S k) c = Seq c (power k c)
+inv : Circuit n m -> Maybe (Circuit m n)
+
+inv Id = Just Id
+
+inv (GateApplication g) =
+  case adjointGate g of
+    Just g' => Just (GateApplication g')
+    Nothing => Nothing    -- non-unitary gate, no inverse
+
+inv (Seq c1 c2) = do
+  c1' <- inv c1
+  c2' <- inv c2
+  pure (Seq c2' c1')
+
+inv (Par c1 c2) = do
+  c1' <- inv c1
+  c2' <- inv c2
+  pure (Par c1' c2')
+
+inv (Init _) = Nothing
+
+-- Repeated application of a circuit
+public export
+pow : (k : Nat) -> Circuit n n -> Circuit n n
+pow Z     _ = Id
+pow (S k) c = Seq c (pow k c)

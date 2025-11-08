@@ -143,6 +143,7 @@ targets (UGate u)    = targetsUnitary u
 targets (Measure q)  = (_ ** [q])
 targets (Reset q)    = (_ ** [q])
 
+public export
 mkControlled :
   {k : Nat} ->
   (cs : Vect k (Fin n)) ->
