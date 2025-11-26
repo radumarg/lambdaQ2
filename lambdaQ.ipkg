@@ -2,12 +2,14 @@ package lambdaQ
 
 sourcedir = "src"
 modules = Main,
+          Quantum.Adjoint,
           Quantum.Core,
           Quantum.Gates,
           Quantum.Circuit,
           Quantum.Control,
           Quantum.Helpers,
           Quantum.GateHelpers,
+          Quantum.Qasm3Serialize,
           SampleCircuit
 main = Main
 executable = lambdaQ

@@ -1,5 +1,6 @@
 module Quantum.Circuit
 
+import Quantum.Adjoint
 import Quantum.Gates
 
 %default total
