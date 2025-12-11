@@ -17,6 +17,10 @@ Neg Radians where
   (-) x y = x + negate y
 
 public export
+Show Radians where
+  show (MkRadians x) = show x
+
+public export
 pi : Radians
 pi = MkRadians 3.141592653589793
 
