@@ -65,7 +65,7 @@ data UnitaryGate : Nat -> Type where
         -> {auto 0 d2t : Not (c2 = t)}
         -> UnitaryGate n
   CSWAP : (c,a,b : Fin n)
-        -> {auto 0 cab : Not (a = b)}
+        -> {auto 0 ab : Not (a = b)}
         -> {auto 0 ca  : Not (c = a)}
         -> {auto 0 cb  : Not (c = b)}
         -> UnitaryGate n
