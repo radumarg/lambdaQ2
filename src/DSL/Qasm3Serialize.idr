@@ -1,10 +1,10 @@
-module Quantum.Qasm3Serialize
+module DSL.Qasm3Serialize
 
 import Data.Fin
 import Data.Nat
 import Data.Vect
-import Quantum.Core    -- Radians, MkRadians, pi, Num / Neg
-import Quantum.Gates   -- UnitaryGate, etc.
+import DSL.Core    -- Radians, MkRadians, pi, Num / Neg
+import DSL.Gates   -- UnitaryGate, etc.
 
 %default total
 

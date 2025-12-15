@@ -2,11 +2,11 @@
 module SampleCircuit
 
 import Data.Fin
-import Quantum.Circuit
-import Quantum.Core
-import Quantum.Gates
-import Quantum.GateHelpers
-import Quantum.Helpers
+import DSL.Circuit
+import DSL.Core
+import DSL.Gates
+import DSL.GateHelpers
+import DSL.Helpers
 
 %foreign "scheme:lambda (msg) (let ((loc (##sys#current-source-location))) (if loc (raise (make-compile-time-error msg loc)) (raise (make-exn msg '()))))"
 prim_panic : String -> a

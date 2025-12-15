@@ -1,9 +1,9 @@
-module Quantum.Adjoint
+module DSL.Adjoint
 
 import Data.Fin
-import Quantum.Control
-import Quantum.Core
-import Quantum.Gates
+import DSL.Control
+import DSL.Core
+import DSL.Gates
 
 public export
 adjointUnitary : UnitaryGate n -> UnitaryGate n

@@ -14,8 +14,10 @@ let
 ctrl
 negctrl
 &
+new
 measr
 reset
+qalloc ?
 
 // APLYING GATES
 
@@ -40,7 +42,7 @@ let (q0, q1) = ctrl(q0) H(q1);
 let q1 = ctrl(&q0) H(q1);
 H(q0); // q0 still available (read-only used as control)
 
-// QUANTUM REGISTERS
+// QUANTUM REGISTERS ..?
 
 // dynamic register (runtime-sized)
 // lower into List + runtime checks

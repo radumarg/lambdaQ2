@@ -1,11 +1,11 @@
-module Quantum.GateHelpers
+module DSL.GateHelpers
 
 import Data.Fin
 import Data.Vect
-import Quantum.Gates
-import Quantum.Circuit
-import Quantum.Control
-import Quantum.Core
+import DSL.Gates
+import DSL.Circuit
+import DSL.Control
+import DSL.Core
 
 %default total
 

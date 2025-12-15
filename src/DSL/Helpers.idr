@@ -1,4 +1,4 @@
-module Quantum.Helpers
+module DSL.Helpers
 
 import Data.Fin
 import Data.Nat

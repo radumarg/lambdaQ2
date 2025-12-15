@@ -1,7 +1,7 @@
-module Quantum.Circuit
+module DSL.Circuit
 
-import Quantum.Adjoint
-import Quantum.Gates
+import DSL.Adjoint
+import DSL.Gates
 
 %default total
 

@@ -1,4 +1,4 @@
-module Quantum.Core
+module DSL.Core
 
 %default total
 
