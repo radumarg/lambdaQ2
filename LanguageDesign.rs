@@ -148,3 +148,26 @@ fn myFunction() {
 // tuples
 let t = (1, 3.14, true);
 let t: (int, float, bool) = (1, 3.14, true);
+
+// positional indexing
+let x = t.0;
+let y = t.1;
+let z = t.2;
+
+let (a, b, c) = (1, 2, 3);
+let (x, _, z) = (1, 2, 3);
+
+fn f(x: (int, bool)) {
+    let (n, flag) = x;
+}
+
+fn div_rem(a: i32, b: i32) -> (i32, i32) {
+    (a / b, a % b)
+}
+
+// unit type
+let u: () = ();
+
+fn f() {
+    // returns ()
+}
