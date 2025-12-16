@@ -51,3 +51,85 @@ let qs: QReg = qalloc(n);
 // static register (compile-time sized)
 // lower into Vect n
 let qs: QReg<8> = qalloc(8);
+
+// RUST-LIKE CONTROL FLOW
+
+fn main() {
+    //
+}
+
+// commnent
+/*
+   multi-line comment
+*/
+
+let my_num = 5;         // integer
+let my_double = 5.99;   // float
+let my_letter = 'D';    // character
+let my_bool = true;     // boolean
+let my_text = "Hello";  // string
+
+// operators
+let add = 5 + 3;
+let sub = 10 - 4;
+let mul = 6 * 2;
+let div = 12 / 3;
+let rem = 10 % 3;
+
+let mut x = 10;
+x += 5;
+x -= 2;
+x *= 2;
+x /= 3;
+x %= 4;
+
+// booleans
+let is_programming_fun: bool = true;
+
+if 7 > 5 {
+  // do something
+} else {
+  // do something else
+}
+
+// loops
+let mut count = 1;
+loop {
+    if count == 3 {
+        break;
+    }
+    count += 1;
+}
+
+// loops can return a value
+let result = loop {
+  println!("Hello!");
+
+  if count == 3 {
+    break count;
+  }
+
+  count += 1;
+};
+
+// while loop
+let mut count = 1;
+while count <= 5 {
+  count += 1;
+}
+
+// for loop
+for i in 1..6 {
+  // do something
+}
+
+// functions
+fn function_name() {
+  // code to be executed
+}
+
+// variable scope
+fn myFunction() {
+  let message = "Hello!";
+  println!("{}", message);  // You can access the message variable here but not outside this function
+}
