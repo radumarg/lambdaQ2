@@ -1,8 +1,11 @@
 
 // TYPES
 
-true
-false
+bool
+int
+uint
+angle
+float
 Bit
 Qubit
 QReg
@@ -11,6 +14,16 @@ BReg
 // KEYWORDS
 
 let
+fn
+true
+false
+while
+loop
+for
+if
+else
+break
+return
 ctrl
 negctrl
 &
@@ -65,9 +78,7 @@ fn main() {
 
 let my_num = 5;         // integer
 let my_double = 5.99;   // float
-let my_letter = 'D';    // character
 let my_bool = true;     // boolean
-let my_text = "Hello";  // string
 
 // operators
 let add = 5 + 3;
@@ -133,3 +144,7 @@ fn myFunction() {
   let message = "Hello!";
   println!("{}", message);  // You can access the message variable here but not outside this function
 }
+
+// tuples
+let t = (1, 3.14, true);
+let t: (int, float, bool) = (1, 3.14, true);
