@@ -1,4 +1,4 @@
-module DSL.Qasm3Serialize
+module OpenQASM3.Serialize
 
 import Data.Fin
 import Data.Nat

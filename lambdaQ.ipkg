@@ -9,7 +9,8 @@ modules = Main,
           DSL.Control,
           DSL.Helpers,
           DSL.GateHelpers,
-          DSL.Qasm3Serialize,
+          OpenQASM3.Serialize,
+          Frontend.AST,
           SampleCircuit
 main = Main
 executable = lambdaQ
