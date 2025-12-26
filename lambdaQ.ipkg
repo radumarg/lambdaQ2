@@ -1,6 +1,8 @@
 package lambdaQ
 
 sourcedir = "src"
+depends = elab-util
+
 modules = Main,
           DSL.Adjoint,
           DSL.Core,
@@ -9,8 +11,9 @@ modules = Main,
           DSL.Control,
           DSL.Helpers,
           DSL.GateHelpers,
-          OpenQASM3.Serialize,
           Frontend.AST,
+          OpenQASM3.Serialize,
           SampleCircuit
+
 main = Main
 executable = lambdaQ
