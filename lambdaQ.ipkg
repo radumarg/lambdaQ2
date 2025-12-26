@@ -12,6 +12,9 @@ modules = Main,
           DSL.Helpers,
           DSL.GateHelpers,
           Frontend.AST,
+          Frontend.Lexer,
+          Frontend.Parser,
+          Frontend.Token,
           OpenQASM3.Serialize,
           SampleCircuit
 
