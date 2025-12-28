@@ -6,10 +6,10 @@ import Language.Reflection
 %default total
 %language ElabReflection
 
---------------------------------------------------------
+------------------------------------------------------------------------------
 -- GateName: enumerates the built-in quantum gates.
 -- In the lexer, strings like "H" becomes TokGate GateH
---------------------------------------------------------
+------------------------------------------------------------------------------
 public export
 data GateName
   = GateId | GateX | GateY | GateZ | GateH
@@ -27,25 +27,25 @@ data GateName
   | GateCCX | GateCSWAP
   | GateGPI | GateGPI2 | GateMS
 
------------------------------------------------------------
+------------------------------------------------------------------------------
 -- BuiltinName: built-in runtime-like functions (keywords).
 --   qalloc()      -> Qubit
 --   qalloc(8)     -> QReg
 --   measr(q)      -> (Bit, Qubit)
 --   reset(q)      -> Qubit
------------------------------------------------------------
+------------------------------------------------------------------------------
 public export
 data BuiltinName
   = BuiltinQAlloc
   | BuiltinMeasr
   | BuiltinReset
 
----------------------------------------------------
+------------------------------------------------------------------------------
 -- AssignOp: statement-level assignment operators
 --   x = ...
 --   x += ...
 --   x %= ...
----------------------------------------------------
+------------------------------------------------------------------------------
 public export
 data AssignOp : Type where
   AssignEq    : AssignOp
@@ -55,24 +55,24 @@ data AssignOp : Type where
   AssignDivEq : AssignOp
   AssignRemEq : AssignOp
 
--------------------------------
+------------------------------------------------------------------------------
 -- UnaryOp: prefix operators
 --   -x
 --   !flag
--------------------------------
+------------------------------------------------------------------------------
 public export
 data UnaryOp : Type where
   UnaryNeg : UnaryOp     -- -x
   UnaryNot : UnaryOp     -- !x
 
---------------------------------------
+------------------------------------------------------------------------------
 -- BinaryOp: infix operators.
 -- Used inside expressions:
 --  2 + 3
 -- Range operators:
 --  a .. b    (exclusive)
 --  a ..= b   (inclusive)
---------------------------------------
+------------------------------------------------------------------------------
 public export
 data BinaryOp : Type where
   OpAdd       : BinaryOp  -- +
@@ -98,11 +98,11 @@ data BinaryOp : Type where
   OpRangeExcl : BinaryOp  -- ..
   OpRangeIncl : BinaryOp  -- ..=
 
---------------------------------------------------------------------
+------------------------------------------------------------------------------
 -- Literal: user-written literal values.
 -- Store int/float as RAW STRINGS to preserve formatting and decide 
 -- later wether to allow underscores, hex, scientific, etc.
---------------------------------------------------------------------
+------------------------------------------------------------------------------
 public export
 data Literal : Type where
   LitIntRaw   : String -> Literal
@@ -129,7 +129,7 @@ data TypRegName
   = TypRegQReg
   | TypRegBReg
 
---------------------------------------------------------------------------------
+------------------------------------------------------------------------------
 -- TypExpr: type expressions in annotations and function signatures.
 --   ()                => TypUnit
 --   int               => TypPrim TypPrimInt
@@ -141,7 +141,7 @@ data TypRegName
 --   QReg[n]           => TypReg TypRegQReg (Just (SizeVar "n"))
 --   [int; 4]          => TypArrayFixed (TypPrim TypPrimInt) (SizeNat 4)
 --   [int; n]          => TypArrayFixed (TypPrim TypPrimInt) (SizeVar "n")
---------------------------------------------------------------------------------
+------------------------------------------------------------------------------
 public export
 data SizeExpr : Type where
   SizeNat : Nat -> SizeExpr
@@ -169,12 +169,12 @@ data TypExpr : Type where
                -> (typLengthSizeExpr : SizeExpr)
                -> TypExpr
 
---------------------------------------------------------------------------------
+------------------------------------------------------------------------------
 -- Pattern: used in let bindings and match arms.
 --   let x = ...
 --   let (a, b, _) = ...
 --   match day { 1 => ..., _ => ... }
---------------------------------------------------------------------------------
+------------------------------------------------------------------------------
 public export
 data Pattern : Type where
   PatWildcard : Pattern                 -- _
@@ -183,14 +183,14 @@ data Pattern : Type where
   PatUnit     : Pattern                 -- ()
   PatTuple    : List Pattern -> Pattern -- (a,b,_)
 
--------------------------------------------------------------------
+------------------------------------------------------------------------------
 -- Control prefix syntax for quantum controls:
 --   ctrl(q0) H(q1);
 --   negctrl(q0) H(q1);
 --   ctrl(q0 = true, q1 = false) H(q2);
 --   ctrl(q0, q1) { H(q2); CX(q2,q3); }
 -- Controls can be positional expressions or named args (q0 = true).
---------------------------------------------------------------------
+------------------------------------------------------------------------------
 public export
 record ControlNamedArg where
   constructor MkControlNamedArg
@@ -208,13 +208,13 @@ mutual
     = PrefixCtrl    (List ControlArg)
     | PrefixNegCtrl (List ControlArg)
 
-  ----------------------------------------------------------------
+  ----------------------------------------------------------------------------
   -- Expressions.
   --  * Gate calls are expressions: H(q0) is an expression
   --  * Blocks are expressions: { ... } is EBlock
   --  * ctrl(...) can apply to a gate or to a block (EControlBlock)
   --  * "if" and "loop/while/for/match" are expressions (like Rust)
-  ----------------------------------------------------------------
+  ----------------------------------------------------------------------------
   public export
   data Expr : Type where
 
@@ -301,13 +301,13 @@ mutual
     matchPattern : Pattern
     matchBodyExpr : Expr
 
-  --------------------------------------------------------------------------------
+  ---------------------------------------------------------------------------------
   -- Blocks and statements.
   --
   -- In Rust style:
   --   - expressions followed by `;` become statements
   --   - the final expression in a block may omit `;` and becomes the block's value
-  --------------------------------------------------------------------------------
+  ---------------------------------------------------------------------------------
   public export
   record BlockExpr where
     constructor MkBlockExpr
@@ -341,11 +341,10 @@ mutual
     -- return [expr]? [;]?
     StmtReturn : (typReturnValueMaybe : Maybe Expr) -> Stmt
 
---------------------------------------------------------------------------------
+------------------------------------------------------------------------------
 -- Function declarations.
 --   fn f(x: int) -> int { x + 1 }
---------------------------------------------------------------------------------
-public export
+------------------------------------------------------------------------------
 record FnParam where
   constructor MkFnParam
   paramName : String
@@ -359,9 +358,9 @@ record FnDecl where
   fnReturnTypeMaybe : Maybe TypExpr
   fnBodyBlock : BlockExpr
 
---------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 -- Top-level items: allow either function declarations or top-level statements.
---------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 public export
 data Item
   = ItemFnDecl FnDecl
@@ -372,9 +371,9 @@ record Program where
   constructor MkProgram
   programItems : List Item
 
-----------------------------------------
+------------------------------------------------------------------------------
 -- Derivations for debugging/testing
-----------------------------------------
+------------------------------------------------------------------------------
 %runElab derive "GateName" [Show, Eq]
 %runElab derive "BuiltinName" [Show, Eq]
 %runElab derive "AssignOp" [Show, Eq]

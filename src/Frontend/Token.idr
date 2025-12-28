@@ -14,9 +14,9 @@ import Frontend.AST
 -- "Bounded" comes from idris2-parser and attaches source span info.
 ----------------------------------------------------------------------
 
-------------------------------------------------
+----------------------------------------------------------------------
 -- Keywords: reserved words that affect syntax.
-------------------------------------------------
+----------------------------------------------------------------------
 public export
 data Keyword
   = KwAs | KwBreak | KwCtrl | KwContinue | KwElse | KwFalse
@@ -24,9 +24,9 @@ data Keyword
   | KwMatch | KwMeasr | KwNegCtrl | KwQAlloc | KwReset
   | KwReturn | KwTrue | KwWhile
 
----------------------------------------
+----------------------------------------------------------------------
 -- Symbols: punctuation and operators.
-----------------------------------------
+----------------------------------------------------------------------
 public export
 data Symbol
   = SymQuestion             -- ?
@@ -49,7 +49,7 @@ data Symbol
   | SymArrow                -- ->
   | SymFatArrow             -- =>  (match arm separator)
 
-------------------------------
+----------------------------------------------------------------------
 -- Token:
 --   TokIdent "x"
 --   TokIntLitRaw "123"
@@ -61,7 +61,7 @@ data Symbol
 --   TokGate GateH
 --   TokSym SymPlusEq
 --   TokUnderscore
--------------------------------
+----------------------------------------------------------------------
 public export
 data Token
   = TokIdent       String
@@ -75,9 +75,9 @@ data Token
   | TokSym         Symbol
   | TokUnderscore
 
--------------------------------------------------------------
+----------------------------------------------------------------------
 -- Mappings used by lexer: identifier text -> token category
--------------------------------------------------------------
+----------------------------------------------------------------------
 public export
 keywordFromString : String -> Maybe Keyword
 keywordFromString s =
@@ -167,9 +167,9 @@ gateFromString s =
     "MS"    => Just GateMS
     _       => Nothing
 
-----------------------------------------
+----------------------------------------------------------------------
 -- Derivations for debugging/testing
-----------------------------------------
+----------------------------------------------------------------------
 %runElab derive "Keyword" [Show, Eq]
 %runElab derive "Symbol" [Show, Eq]
 %runElab derive "Token" [Show, Eq]

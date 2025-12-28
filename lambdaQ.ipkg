@@ -1,7 +1,8 @@
 package lambdaQ
 
 sourcedir = "src"
-depends = elab-util
+depends = elab-util,
+          parser
 
 modules = Main,
           DSL.Adjoint,
