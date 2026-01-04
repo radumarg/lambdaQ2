@@ -330,72 +330,69 @@ lexSymbol startPosition charsRemaining =
 public export
 lexQuantum : String -> Either (Bounded LexerErr) (List (Bounded Token))
 lexQuantum inputString =
-  let charsAll = unpack inputString in
+  let charsAll = unpack inputString
+      fuel    = S (length charsAll)  -- enough steps if each iteration consumes ≥ 1 char
+  in go fuel begin charsAll
+where
+  go : Nat -> Position -> List Char -> Either (Bounded LexerErr) (List (Bounded Token))
+  go Z currentPosition _ =
+    -- If we ever get here, something failed to make progress; report a hard lexer error.
+    Left (mkBoundedHere LexFuelExhausted currentPosition currentPosition)
 
-  let
-    go : Position -> List Char -> Either (Bounded LexerErr) (List (Bounded Token))
-    go currentPosition charsRemaining =
-      case charsRemaining of
-        [] =>
-          Right []
+  go (S fuelLeft) currentPosition charsRemaining =
+    case charsRemaining of
+      [] =>
+        Right []
 
-        c :: rest =>
-          -- 1) skip whitespace
-          if isSpace c
-            then
-              go (advanceMany currentPosition [c]) rest
+      c :: rest =>
+        -- 1) skip whitespace
+        if isSpace c then
+          go fuelLeft (advanceMany currentPosition [c]) rest
 
-          -- 2) skip line comments: //
-          else if startsWithList (unpack "//") (c :: rest)
-            then
-              -- Consume the leading '//' first, then skip until newline/EOF.
-              let afterSlashesPosition = advanceMany currentPosition ['/', '/'] in
-              let afterSlashesChars = dropList 2 (c :: rest) in
-              let (newPosition, remainingChars) = skipLineComment afterSlashesPosition afterSlashesChars in
-              go newPosition remainingChars
+        -- 2) skip line comments: //
+        else if startsWithList (unpack "//") (c :: rest) then
+          let afterSlashesPosition = advanceMany currentPosition ['/', '/']
+              afterSlashesChars    = dropList 2 (c :: rest)
+              (newPosition, remainingChars) =
+                skipLineComment afterSlashesPosition afterSlashesChars
+          in go fuelLeft newPosition remainingChars
 
-          -- 3) skip block comments: /* ... */
-          else if startsWithList (unpack "/*") (c :: rest)
-            then
-              -- NOTE: improved error spans: pass the position of '/' (the start of "/*")
-              let afterStartChars = dropList 2 (c :: rest) in
-              case skipBlockComment currentPosition afterStartChars of
-                Left err => Left err
-                Right (newPosition, remainingChars) => go newPosition remainingChars
+        -- 3) skip block comments: /* ... */
+        else if startsWithList (unpack "/*") (c :: rest) then
+          let afterStartChars = dropList 2 (c :: rest) in
+          case skipBlockComment currentPosition afterStartChars of
+            Left err => Left err
+            Right (newPosition, remainingChars) =>
+              go fuelLeft newPosition remainingChars
 
-          -- 4) string literal: "..."
-          else if c == '"'
-            then
-              -- NOTE: improved error spans: pass the position of the opening quote '"'
-              case lexStringLiteral currentPosition rest of
-                Left err => Left err
-                Right (stringValue, endPosition, remainingChars) =>
-                  let boundedToken = mkBoundedHere (TokStringLit stringValue) currentPosition endPosition in
-                  (boundedToken ::) <$> go endPosition remainingChars
+        -- 4) string literal
+        else if c == '"' then
+          case lexStringLiteral currentPosition rest of
+            Left err => Left err
+            Right (stringValue, endPosition, remainingChars) =>
+              let boundedToken =
+                    mkBoundedHere (TokStringLit stringValue) currentPosition endPosition
+              in (boundedToken ::) <$> go fuelLeft endPosition remainingChars
 
-          -- 5) number literal
-          else if isDigit c
-            then
-              case lexNumberLiteral currentPosition (c :: rest) of
-                Left err => Left err
-                Right (token, endPosition, remainingChars) =>
-                  let boundedToken = mkBoundedHere token currentPosition endPosition in
-                  (boundedToken ::) <$> go endPosition remainingChars
+        -- 5) number literal
+        else if isDigit c then
+          case lexNumberLiteral currentPosition (c :: rest) of
+            Left err => Left err
+            Right (token, endPosition, remainingChars) =>
+              let boundedToken = mkBoundedHere token currentPosition endPosition
+              in (boundedToken ::) <$> go fuelLeft endPosition remainingChars
 
-          -- 6) identifier/keyword/type/gate
-          else if isIdentStartChar c
-            then
-              let (token, endPosition, remainingChars) =
-                    lexIdentOrKeywordOrTypeOrGate currentPosition (c :: rest) in
-              let boundedToken = mkBoundedHere token currentPosition endPosition in
-              (boundedToken ::) <$> go endPosition remainingChars
+        -- 6) identifier/keyword/type/gate
+        else if isIdentStartChar c then
+          let (token, endPosition, remainingChars) =
+                lexIdentOrKeywordOrTypeOrGate currentPosition (c :: rest)
+              boundedToken = mkBoundedHere token currentPosition endPosition
+          in (boundedToken ::) <$> go fuelLeft endPosition remainingChars
 
-          -- 7) symbols/operators
-          else
-            case lexSymbol currentPosition (c :: rest) of
-              Left err => Left err
-              Right (token, endPosition, remainingChars) =>
-                let boundedToken = mkBoundedHere token currentPosition endPosition in
-                (boundedToken ::) <$> go endPosition remainingChars
-  in
-    go begin charsAll
+        -- 7) symbols/operators
+        else
+          case lexSymbol currentPosition (c :: rest) of
+            Left err => Left err
+            Right (token, endPosition, remainingChars) =>
+              let boundedToken = mkBoundedHere token currentPosition endPosition
+              in (boundedToken ::) <$> go fuelLeft endPosition remainingChars
