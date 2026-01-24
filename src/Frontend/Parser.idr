@@ -783,8 +783,11 @@ mutual
   --   H(q0)      (prefix list = [])
   --------------------------------------------------------------------------------
   parseGateOrControl : Nat -> Parser Expr
-  parseGateOrControl fuel tokens =
-    case parseControlPrefixes fuel tokens of
+  parseGateOrControl Z tokens =
+    Left (outOfFuelErr tokens)
+
+  parseGateOrControl (S fuelLeft) tokens =
+    case parseControlPrefixes fuelLeft tokens of
       Left err => Left err
       Right (controlPrefixes, tokens1) =>
         case tokens1 of
@@ -793,7 +796,7 @@ mutual
             case expectSymbol SymLParen restAfterGate of
               Left err => Left err
               Right ((), tokensAfterLParen) =>
-                case parseCommaSep0Until fuel SymRParen (parseExprPrec fuel 0) tokensAfterLParen of
+                case parseCommaSep0Until fuelLeft SymRParen (parseExprPrec fuelLeft 0) tokensAfterLParen of
                   Left err => Left err
                   Right (gateArgs, tokensAfterArgs) =>
                     case expectSymbol SymRParen tokensAfterArgs of
@@ -803,7 +806,7 @@ mutual
 
           -- Control block: ctrl(...) { ... }
           (B (TokSym SymLBrace) _ :: _) =>
-            case parseBlockExpr tokens1 of
+            case parseBlockExprFuel fuelLeft tokens1 of
               Left err => Left err
               Right (blk, tokensAfterBlock) =>
                 Right (EControlBlock controlPrefixes blk, tokensAfterBlock)
@@ -823,20 +826,27 @@ mutual
   --   if we can't parse a statement or a valid tail expression, we error.
   --------------------------------------------------------------------------------
 
-  parseBlockExpr : Parser BlockExpr
-  parseBlockExpr tokens =
+  parseBlockExprFuel : Nat -> Parser BlockExpr
+  parseBlockExprFuel Z tokens =
+    Left (outOfFuelErr tokens)
+
+  parseBlockExprFuel (S fuelLeft) tokens =
     case expectSymbol SymLBrace tokens of
       Left err => Left err
       Right ((), tokensAfterLBrace) =>
-        -- Local fuel for the block: proportional to remaining tokens.
-        let blockFuel : Nat = 2 * length tokensAfterLBrace + 16 in
-        case parseBlockBody blockFuel [] tokensAfterLBrace of
+        case parseBlockBody fuelLeft [] tokensAfterLBrace of
           Left err => Left err
           Right (statements, tailExprMaybe, tokensBeforeRBrace) =>
             case expectSymbol SymRBrace tokensBeforeRBrace of
               Left err => Left err
               Right ((), tokensAfterRBrace) =>
                 Right (MkBlockExpr statements tailExprMaybe, tokensAfterRBrace)
+
+  parseBlockExpr : Parser BlockExpr
+  parseBlockExpr tokens =
+    -- Local fuel for the block: proportional to remaining tokens.
+    let blockFuel : Nat = 2 * length tokens + 16 in
+    parseBlockExprFuel blockFuel tokens
 
   -- Parse zero or more statements, then an optional tail expression, until '}'.
   parseBlockBody :
@@ -1033,11 +1043,14 @@ mutual
   -- ATOMS (Expr forms that do not start with infix operators)
   --------------------------------------------------------------------------------
   parseAtom : Nat -> Parser Expr
-  parseAtom fuel tokens =
+  parseAtom Z tokens =
+    Left (outOfFuelErr tokens)
+
+  parseAtom (S fuelLeft) tokens =
     case peekToken tokens of
       -- Blocks: { ... }
       Just (TokSym SymLBrace) =>
-        case parseBlockExpr tokens of
+        case parseBlockExprFuel fuelLeft tokens of
           Left err => Left err
           Right (blk, rest) => Right (EBlock blk, rest)
 
@@ -1046,10 +1059,10 @@ mutual
         case expectKeyword KwIf tokens of
           Left err => Left err
           Right ((), tokens1) =>
-            case parseExprPrec fuel 0 tokens1 of
+            case parseExprPrec fuelLeft 0 tokens1 of
               Left err => Left err
               Right (condExpr, tokens2) =>
-                case parseBlockExpr tokens2 of
+                case parseBlockExprFuel fuelLeft tokens2 of
                   Left err => Left err
                   Right (thenBlk, tokens3) =>
                     case acceptKeyword KwElse tokens3 of
@@ -1057,7 +1070,7 @@ mutual
                       Right (False, tokensNoElse) =>
                         Right (EIf condExpr thenBlk Nothing, tokensNoElse)
                       Right (True, tokensAfterElse) =>
-                        case parseExprPrec fuel 0 tokensAfterElse of
+                        case parseExprPrec fuelLeft 0 tokensAfterElse of
                           Left err => Left err
                           Right (elseExpr, tokensAfterElseExpr) =>
                             Right (EIf condExpr thenBlk (Just elseExpr), tokensAfterElseExpr)
@@ -1067,7 +1080,7 @@ mutual
         case expectKeyword KwLoop tokens of
           Left err => Left err
           Right ((), tokens1) =>
-            case parseBlockExpr tokens1 of
+            case parseBlockExprFuel fuelLeft tokens1 of
               Left err => Left err
               Right (blk, rest) =>
                 Right (ELoop blk, rest)
@@ -1077,10 +1090,10 @@ mutual
         case expectKeyword KwWhile tokens of
           Left err => Left err
           Right ((), tokens1) =>
-            case parseExprPrec fuel 0 tokens1 of
+            case parseExprPrec fuelLeft 0 tokens1 of
               Left err => Left err
               Right (condExpr, tokens2) =>
-                case parseBlockExpr tokens2 of
+                case parseBlockExprFuel fuelLeft tokens2 of
                   Left err => Left err
                   Right (blk, rest) =>
                     Right (EWhile condExpr blk, rest)
@@ -1096,10 +1109,10 @@ mutual
                 case expectKeyword KwIn tokens2 of
                   Left err => Left err
                   Right ((), tokens3) =>
-                    case parseExprPrec fuel 0 tokens3 of
+                    case parseExprPrec fuelLeft 0 tokens3 of
                       Left err => Left err
                       Right (iterExpr, tokens4) =>
-                        case parseBlockExpr tokens4 of
+                        case parseBlockExprFuel fuelLeft tokens4 of
                           Left err => Left err
                           Right (blk, rest) =>
                             Right (EFor loopPattern iterExpr blk, rest)
@@ -1109,7 +1122,7 @@ mutual
         case expectKeyword KwMatch tokens of
           Left err => Left err
           Right ((), tokens1) =>
-            case parseExprPrec fuel 0 tokens1 of
+            case parseExprPrec fuelLeft 0 tokens1 of
               Left err => Left err
               Right (scrutineeExpr, tokens2) =>
                 case expectSymbol SymLBrace tokens2 of
@@ -1123,12 +1136,12 @@ mutual
                               case expectSymbol SymFatArrow tokensA of
                                 Left err => Left err
                                 Right ((), tokensB) =>
-                                  case parseExprPrec fuel 0 tokensB of
+                                  case parseExprPrec fuelLeft 0 tokensB of
                                     Left err => Left err
                                     Right (armBodyExpr, tokensC) =>
                                       Right (MkMatchArm armPattern armBodyExpr, tokensC)
                     in
-                    case parseCommaSep0Until fuel SymRBrace parseMatchArm tokens3 of
+                    case parseCommaSep0Until fuelLeft SymRBrace parseMatchArm tokens3 of
                       Left err => Left err
                       Right (arms, tokens4) =>
                         case expectSymbol SymRBrace tokens4 of
@@ -1138,25 +1151,25 @@ mutual
 
       -- Builtins (keywords): qalloc / measr / reset
       Just (TokKw KwQAlloc) =>
-        parseBuiltinCall fuel BuiltinQAlloc tokens
+        parseBuiltinCall fuelLeft BuiltinQAlloc tokens
 
       Just (TokKw KwMeasr) =>
-        parseBuiltinCall fuel BuiltinMeasr tokens
+        parseBuiltinCall fuelLeft BuiltinMeasr tokens
 
       Just (TokKw KwReset) =>
-        parseBuiltinCall fuel BuiltinReset tokens
+        parseBuiltinCall fuelLeft BuiltinReset tokens
 
       -- Gate / control pipeline:
       --   ctrl(...) negctrl(...) H(q)
       --   H(q)
       Just (TokKw KwCtrl) =>
-        parseGateOrControl fuel tokens
+        parseGateOrControl fuelLeft tokens
 
       Just (TokKw KwNegCtrl) =>
-        parseGateOrControl fuel tokens
+        parseGateOrControl fuelLeft tokens
 
       Just (TokGate _) =>
-        parseGateOrControl fuel tokens
+        parseGateOrControl fuelLeft tokens
 
       -- Parentheses:
       --   ()          => unit literal
@@ -1173,7 +1186,7 @@ mutual
                   Right ((), tokens2) =>
                     Right (ELit LitUnit, tokens2)
               _ =>
-                case parseExprPrec fuel 0 tokens1 of
+                case parseExprPrec fuelLeft 0 tokens1 of
                   Left err => Left err
                   Right (firstExpr, tokens2) =>
                     case peekToken tokens2 of
@@ -1181,7 +1194,7 @@ mutual
                         case expectSymbol SymComma tokens2 of
                           Left err => Left err
                           Right ((), tokens3) =>
-                            case parseCommaSep0Until fuel SymRParen (parseExprPrec fuel 0) tokens3 of
+                            case parseCommaSep0Until fuelLeft SymRParen (parseExprPrec fuelLeft 0) tokens3 of
                               Left err => Left err
                               Right (moreExprs, tokens4) =>
                                 case expectSymbol SymRParen tokens4 of
@@ -1201,7 +1214,7 @@ mutual
         case expectSymbol SymLBracket tokens of
           Left err => Left err
           Right ((), tokens1) =>
-            case parseExprPrec fuel 0 tokens1 of
+            case parseExprPrec fuelLeft 0 tokens1 of
               Left err => Left err
               Right (firstExpr, tokens2) =>
                 case peekToken tokens2 of
@@ -1224,7 +1237,7 @@ mutual
 
                   _ =>
                     -- Literal list form: [e1, e2, ...]
-                    case parseCommaSep0Until fuel SymRBracket (parseExprPrec fuel 0) tokens2 of
+                    case parseCommaSep0Until fuelLeft SymRBracket (parseExprPrec fuelLeft 0) tokens2 of
                       Left err => Left err
                       Right (moreExprs, tokens3) =>
                         case expectSymbol SymRBracket tokens3 of
@@ -1246,7 +1259,7 @@ mutual
                     case expectSymbol SymLParen tokens1 of
                       Left err => Left err
                       Right ((), tokens2) =>
-                        case parseCommaSep0Until fuel SymRParen (parseExprPrec fuel 0) tokens2 of
+                        case parseCommaSep0Until fuelLeft SymRParen (parseExprPrec fuelLeft 0) tokens2 of
                           Left err => Left err
                           Right (macroArgs, tokens3) =>
                             case expectSymbol SymRParen tokens3 of
@@ -1284,6 +1297,7 @@ mutual
 
       _ =>
         failAtHead (ParseExpected "expression atom") tokens
+
 
   -- Builtin calls:
   --   qalloc() / qalloc(8) / qalloc   (we allow optional parens)
