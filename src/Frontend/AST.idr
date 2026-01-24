@@ -375,6 +375,18 @@ record Program where
 ------------------------------------------------------------------------------
 -- Derivations for debugging/testing
 ------------------------------------------------------------------------------
+
+-- Minimal Show instance to break mutual
+-- recursion between Expr and control types
+public export
+implementation Show Expr where
+  showPrec _ _ = "<expr>"
+
+-- Minimal Eq instance for Expr
+public export
+implementation Eq Expr where
+  (==) _ _ = False
+
 %runElab derive "GateName" [Show, Eq]
 %runElab derive "BuiltinName" [Show, Eq]
 %runElab derive "AssignOp" [Show, Eq]
@@ -383,16 +395,16 @@ record Program where
 %runElab derive "Literal" [Show, Eq]
 %runElab derive "TypPrimName" [Show, Eq]
 %runElab derive "TypRegName" [Show, Eq]
---%runElab derive "TypExpr" [Show, Eq]
+%runElab derive "SizeExpr" [Show, Eq]
+%runElab derive "TypExpr" [Show, Eq]
 %runElab derive "Pattern" [Show, Eq]
 %runElab derive "ControlNamedArg" [Show, Eq]
--- %runElab derive "ControlArg" [Show, Eq]
---%runElab derive "ControlPrefix" [Show, Eq]
--- %runElab derive "MatchArm" [Show, Eq]
--- %runElab derive "BlockExpr" [Show, Eq]
--- %runElab derive "Expr" [Show, Eq]
--- %runElab derive "Stmt" [Show, Eq]
--- %runElab derive "FnParam" [Show, Eq]
--- %runElab derive "FnDecl" [Show, Eq]
--- %runElab derive "Item" [Show, Eq]
--- %runElab derive "Program" [Show, Eq]
+%runElab derive "ControlArg" [Show, Eq]
+%runElab derive "ControlPrefix" [Show, Eq]
+%runElab derive "MatchArm" [Show, Eq]
+%runElab derive "Stmt" [Show, Eq]
+%runElab derive "BlockExpr" [Show, Eq]
+%runElab derive "FnParam" [Show, Eq]
+%runElab derive "FnDecl" [Show, Eq]
+%runElab derive "Item" [Show, Eq]
+%runElab derive "Program" [Show, Eq]

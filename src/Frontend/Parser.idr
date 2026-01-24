@@ -825,7 +825,6 @@ mutual
   -- IMPORTANT: no silent fallback:
   --   if we can't parse a statement or a valid tail expression, we error.
   --------------------------------------------------------------------------------
-
   parseBlockExprFuel : Nat -> Parser BlockExpr
   parseBlockExprFuel Z tokens =
     Left (outOfFuelErr tokens)
@@ -1298,7 +1297,6 @@ mutual
       _ =>
         failAtHead (ParseExpected "expression atom") tokens
 
-
   -- Builtin calls:
   --   qalloc() / qalloc(8) / qalloc   (we allow optional parens)
   --   measr(qs)
@@ -1338,7 +1336,6 @@ mutual
 --------------------------------------------------------------------------------
 -- TOP-LEVEL: function declarations + program parsing
 --------------------------------------------------------------------------------
-
 parseFnParam : Parser FnParam
 parseFnParam tokens =
   case expectIdentName tokens of
