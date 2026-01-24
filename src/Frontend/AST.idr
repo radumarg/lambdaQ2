@@ -345,6 +345,7 @@ mutual
 -- Function declarations.
 --   fn f(x: int) -> int { x + 1 }
 ------------------------------------------------------------------------------
+public export
 record FnParam where
   constructor MkFnParam
   paramName : String
