@@ -35,4 +35,5 @@ testParseSample =
         Right program => putStrLn $ "Parsed program: " ++ show program
 
 main : IO ()
-main = testParseSample
+main = do
+  testParseSample

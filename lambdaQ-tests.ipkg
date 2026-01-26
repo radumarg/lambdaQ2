@@ -15,8 +15,6 @@ modules = DSL.Adjoint,
           Frontend.Lexer,
           Frontend.Parser,
           Frontend.Token,
-          OpenQASM3.Serialize,
-          SampleCircuit,
           Test.ParserTests
 
 main = Test.ParserTests

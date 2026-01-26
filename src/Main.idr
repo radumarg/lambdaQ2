@@ -2,8 +2,8 @@ module Main
 
 import Frontend.AST
 import Frontend.Lexer
-import Frontend.Token
 import Frontend.Parser
+import Frontend.Token
 import System.File
 import Text.Bounds
 

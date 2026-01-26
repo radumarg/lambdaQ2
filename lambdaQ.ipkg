@@ -16,7 +16,7 @@ modules = Main,
           Frontend.Lexer,
           Frontend.Parser,
           Frontend.Token,
-          OpenQASM3.Serialize,
+          Serialize.OpenQASM3Serializer,
           SampleCircuit,
           Test.ParserTests
 

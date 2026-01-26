@@ -1,4 +1,4 @@
-module OpenQASM3.Serialize
+module Serialize.OpenQASM3Serializer
 
 import Data.Fin
 import Data.Nat
