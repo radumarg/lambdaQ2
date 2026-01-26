@@ -1,11 +1,10 @@
-package lambdaQ
+package lambdaQ-tests
 
 sourcedir = "src"
 depends = elab-util,
           parser
 
-modules = Main,
-          DSL.Adjoint,
+modules = DSL.Adjoint,
           DSL.Core,
           DSL.Gates,
           DSL.Circuit,
@@ -20,5 +19,5 @@ modules = Main,
           SampleCircuit,
           Test.ParserTests
 
-main = Main
-executable = lambdaQ
+main = Test.ParserTests
+executable = lambdaQ-tests

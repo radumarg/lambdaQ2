@@ -211,7 +211,9 @@ if b == 1 { X(q); }
 
 // (34) Bitwise operations:
 
-	| and ^
+let and_ = a & b;
+let or_  = a | b;
+let xor_ = a ^ b;
 
 // (35) Blocks as expressions:
 

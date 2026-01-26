@@ -1,4 +1,23 @@
 module Main
 
+import Frontend.AST
+import Frontend.Lexer
+import Frontend.Token
+import Frontend.Parser
+import System.File
+import Text.Bounds
+
 main : IO ()
-main = putStrLn "Hello from Idris2!"
+main = do
+  putStrLn "Hello from Idris2!"
+  fileResult <- readFile "program.rs"
+  case fileResult of
+    Left fileErr => putStrLn $ "Failed to read program.rs: " ++ show fileErr
+    Right sampleProgram =>
+      case lexQuantum sampleProgram of
+        Left err => putStrLn $ "Lexer error: " ++ show err
+        Right tokens => do
+          putStrLn $ "Tokens: " ++ show tokens
+          case parseProgramAll tokens of
+            Left err => putStrLn $ "Parse error: " ++ show err
+            Right program => putStrLn $ "Parsed program: " ++ show program

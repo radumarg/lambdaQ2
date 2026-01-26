@@ -33,6 +33,14 @@ data GateName
 --   qalloc(8)     -> QReg
 --   measr(q)      -> (Bit, Qubit)
 --   reset(q)      -> Qubit
+-- TODO:
+-- uncompute, discard, 
+-- adjoint, pow
+-- sin, asin, cos, acos, tan, atan
+-- ceil, floor, round, 
+-- exp, ln, log2, log10
+-- sqrt, abs 
+-- min, max
 ------------------------------------------------------------------------------
 public export
 data BuiltinName
