@@ -1148,15 +1148,78 @@ mutual
                           Right ((), tokens5) =>
                             Right (EMatch scrutineeExpr arms, tokens5)
 
-      -- Builtins (keywords): qalloc / measr / reset
-      Just (TokKw KwQAlloc) =>
-        parseBuiltinCall fuelLeft BuiltinQAlloc tokens
+      -- Builtins (keywords): abs / adjoint / acos / asin / atan / ceil / cos / discard / exp / floor / ln / log10 / log2 / max / measr / min / pow / qalloc / reset / round / sin / sqrt / tan / uncompute
+      Just (TokKw KwAbs) =>
+        parseBuiltinCall fuelLeft BuiltinAbs tokens
+
+      Just (TokKw KwAdjoint) =>
+        parseBuiltinCall fuelLeft BuiltinAdjoint tokens
+
+      Just (TokKw KwAcos) =>
+        parseBuiltinCall fuelLeft BuiltinAcos tokens
+
+      Just (TokKw KwAsin) =>
+        parseBuiltinCall fuelLeft BuiltinAsin tokens
+
+      Just (TokKw KwAtan) =>
+        parseBuiltinCall fuelLeft BuiltinAtan tokens
+
+      Just (TokKw KwCeil) =>
+        parseBuiltinCall fuelLeft BuiltinCeil tokens
+
+      Just (TokKw KwCos) =>
+        parseBuiltinCall fuelLeft BuiltinCos tokens
+
+      Just (TokKw KwDiscard) =>
+        parseBuiltinCall fuelLeft BuiltinDiscard tokens
+
+      Just (TokKw KwExp) =>
+        parseBuiltinCall fuelLeft BuiltinExp tokens
+
+      Just (TokKw KwFloor) =>
+        parseBuiltinCall fuelLeft BuiltinFloor tokens
+
+      Just (TokKw KwLn) =>
+        parseBuiltinCall fuelLeft BuiltinLn tokens
+
+      Just (TokKw KwLog10) =>
+        parseBuiltinCall fuelLeft BuiltinLog10 tokens
+
+      Just (TokKw KwLog2) =>
+        parseBuiltinCall fuelLeft BuiltinLog2 tokens
+
+      Just (TokKw KwMax) =>
+        parseBuiltinCall fuelLeft BuiltinMax tokens
 
       Just (TokKw KwMeasr) =>
         parseBuiltinCall fuelLeft BuiltinMeasr tokens
 
+      Just (TokKw KwMin) =>
+        parseBuiltinCall fuelLeft BuiltinMin tokens
+
+      Just (TokKw KwPow) =>
+        parseBuiltinCall fuelLeft BuiltinPow tokens
+
+      Just (TokKw KwQAlloc) =>
+        parseBuiltinCall fuelLeft BuiltinQAlloc tokens
+
       Just (TokKw KwReset) =>
         parseBuiltinCall fuelLeft BuiltinReset tokens
+
+      Just (TokKw KwRound) =>
+        parseBuiltinCall fuelLeft BuiltinRound tokens
+
+      Just (TokKw KwSin) =>
+        parseBuiltinCall fuelLeft BuiltinSin tokens
+
+      Just (TokKw KwSqrt) =>
+        parseBuiltinCall fuelLeft BuiltinSqrt tokens
+
+      Just (TokKw KwTan) =>
+        parseBuiltinCall fuelLeft BuiltinTan tokens
+
+      Just (TokKw KwUncompute) =>
+        parseBuiltinCall fuelLeft BuiltinUncompute tokens
 
       -- Gate / control pipeline:
       --   ctrl(...) negctrl(...) H(q)
@@ -1298,9 +1361,10 @@ mutual
         failAtHead (ParseExpected "expression atom") tokens
 
   -- Builtin calls:
+  --   math helpers (abs, acos, asin, atan, ceil, cos, exp, floor, ln, log2, log10, pow, round, sin, sqrt, tan)
+  --   quantum helpers (qalloc, measr, reset, adjoint, discard, uncompute)
+  --   misc helpers (max, min)
   --   qalloc() / qalloc(8) / qalloc   (we allow optional parens)
-  --   measr(qs)
-  --   reset(qs)
   parseBuiltinCall : Nat -> BuiltinName -> Parser Expr
   parseBuiltinCall Z builtinName tokens =
     failAtHead (ParseExpected "builtin call (out of fuel)") tokens
@@ -1308,9 +1372,30 @@ mutual
   parseBuiltinCall (S fuelLeft) builtinName tokens =
     let expectedKw : Keyword =
           case builtinName of
-            BuiltinQAlloc => KwQAlloc
-            BuiltinMeasr  => KwMeasr
-            BuiltinReset  => KwReset
+          BuiltinAbs      => KwAbs
+          BuiltinAdjoint  => KwAdjoint
+          BuiltinAcos     => KwAcos
+          BuiltinAsin     => KwAsin
+          BuiltinAtan     => KwAtan
+          BuiltinCeil     => KwCeil
+          BuiltinCos      => KwCos
+          BuiltinDiscard  => KwDiscard
+          BuiltinExp      => KwExp
+          BuiltinFloor    => KwFloor
+          BuiltinLn       => KwLn
+          BuiltinLog10    => KwLog10
+          BuiltinLog2     => KwLog2
+          BuiltinMax      => KwMax
+          BuiltinMeasr   => KwMeasr
+          BuiltinMin     => KwMin
+          BuiltinPow     => KwPow
+          BuiltinQAlloc  => KwQAlloc
+          BuiltinReset   => KwReset
+          BuiltinRound   => KwRound
+          BuiltinSin     => KwSin
+          BuiltinSqrt    => KwSqrt
+          BuiltinTan     => KwTan
+          BuiltinUncompute => KwUncompute
     in
     case expectKeyword expectedKw tokens of
       Left err => Left err

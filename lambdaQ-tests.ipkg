@@ -4,14 +4,7 @@ sourcedir = "src"
 depends = elab-util,
           parser
 
-modules = DSL.Adjoint,
-          DSL.Core,
-          DSL.Gates,
-          DSL.Circuit,
-          DSL.Control,
-          DSL.Helpers,
-          DSL.GateHelpers,
-          Frontend.AST,
+modules = Frontend.AST,
           Frontend.Lexer,
           Frontend.Parser,
           Frontend.Token,

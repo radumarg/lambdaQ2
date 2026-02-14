@@ -33,20 +33,36 @@ data GateName
 --   qalloc(8)     -> QReg
 --   measr(q)      -> (Bit, Qubit)
 --   reset(q)      -> Qubit
--- TODO:
--- uncompute, discard, 
--- adjoint, pow
--- sin, asin, cos, acos, tan, atan
--- ceil, floor, round, 
--- exp, ln, log2, log10
--- sqrt, abs 
--- min, max
+--   math helpers: abs, acos, asin, atan, ceil, cos, exp, floor, ln, log2, log10, pow, round, sin, sqrt, tan
+--   quantum helpers: adjoint, discard, measr, qalloc, reset, uncompute
+--   other helpers: max, min
 ------------------------------------------------------------------------------
 public export
 data BuiltinName
-  = BuiltinQAlloc
+  = BuiltinAbs
+  | BuiltinAdjoint
+  | BuiltinAcos
+  | BuiltinAsin
+  | BuiltinAtan
+  | BuiltinCeil
+  | BuiltinCos
+  | BuiltinDiscard
+  | BuiltinExp
+  | BuiltinFloor
+  | BuiltinLn
+  | BuiltinLog10
+  | BuiltinLog2
+  | BuiltinMax
   | BuiltinMeasr
+  | BuiltinMin
+  | BuiltinPow
+  | BuiltinQAlloc
   | BuiltinReset
+  | BuiltinRound
+  | BuiltinSin
+  | BuiltinSqrt
+  | BuiltinTan
+  | BuiltinUncompute
 
 ------------------------------------------------------------------------------
 -- AssignOp: statement-level assignment operators
