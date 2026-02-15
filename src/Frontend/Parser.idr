@@ -228,7 +228,6 @@ parseSizeExpr tokens =
 -- TypExpr in your AST:
 --   TypUnit
 --   TypPrim TypPrimName
---   TypReg TypRegName (Maybe SizeExpr)
 --   TypTuple (List TypExpr)
 --   TypArrayFixed TypExpr SizeExpr
 --
@@ -297,26 +296,6 @@ mutual
           Left err => Left err
           Right (_, remainingTokens) =>
             Right (TypPrim typPrimName, remainingTokens)
-
-      -- Register type keyword token (already classified by lexer)
-      -- Supports optional sizing: QReg[n], BReg[8]
-      Just (TokTypReg typRegName) =>
-        case popToken tokens of
-          Left err => Left err
-          Right (_, tokensAfterReg) =>
-            case acceptSymbol SymLBracket tokensAfterReg of
-              Left err => Left err
-              Right (False, tokensNoBracket) =>
-                Right (TypReg typRegName Nothing, tokensNoBracket)
-
-              Right (True, tokensAfterLBracket) =>
-                case parseSizeExpr tokensAfterLBracket of
-                  Left err => Left err
-                  Right (sizeExpr, tokensAfterSize) =>
-                    case expectSymbol SymRBracket tokensAfterSize of
-                      Left err => Left err
-                      Right ((), tokensAfterRBracket) =>
-                        Right (TypReg typRegName (Just sizeExpr), tokensAfterRBracket)
 
       _ =>
         failAtHead (ParseExpected "type expression") tokens

@@ -60,7 +60,6 @@ data Symbol
 --   TokStringLit "Hello"
 --   TokKw KwLet
 --   TokTypPrim TypPrimInt
---   TokTypReg TypRegQReg
 --   TokGate GateH
 --   TokSym SymPlusEq
 --   TokUnderscore
@@ -73,7 +72,6 @@ data Token
   | TokStringLit   String
   | TokKw          Keyword
   | TokTypPrim     TypPrimName
-  | TokTypReg      TypRegName
   | TokGate        GateName
   | TokSym         Symbol
   | TokUnderscore
@@ -129,18 +127,16 @@ keywordFromString s =
     _          => Nothing
 
 public export
-typeFromString : String -> Maybe (Either TypPrimName TypRegName)
+typeFromString : String -> Maybe TypPrimName
 typeFromString s =
   case s of
-    "angle" => Just (Left TypPrimAngle)
-    "Bit"   => Just (Left TypPrimBit)
-    "bool"  => Just (Left TypPrimBool)
-    "float" => Just (Left TypPrimFloat)
-    "int"   => Just (Left TypPrimInt)
-    "uint"  => Just (Left TypPrimUInt)
-    "Qubit" => Just (Left TypPrimQubit)
-    "QReg"  => Just (Right TypRegQReg)
-    "BReg"  => Just (Right TypRegBReg)
+    "angle" => Just TypPrimAngle
+    "bit"   => Just TypPrimBit
+    "bool"  => Just TypPrimBool
+    "float" => Just TypPrimFloat
+    "int"   => Just TypPrimInt
+    "uint"  => Just TypPrimUInt
+    "qubit" => Just TypPrimQubit
     _       => Nothing
 
 public export

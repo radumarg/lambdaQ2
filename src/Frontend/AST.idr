@@ -147,22 +147,12 @@ data TypPrimName
   | TypPrimUInt
   | TypPrimQubit
 
--- Register types that can be optionally sized
-public export
-data TypRegName
-  = TypRegQReg
-  | TypRegBReg
-
 ------------------------------------------------------------------------------
 -- TypExpr: type expressions in annotations and function signatures.
 --   ()                => TypUnit
 --   int               => TypPrim TypPrimInt
---   QReg              => TypReg TypRegQReg Nothing
---   QReg[8]           => TypReg TypRegQReg (Just 8)
 --   (int, bool)       => TypTuple [...]
 --   [int; 4]          => TypArrayFixed (TypPrim TypPrimInt) 4
---   QReg[8]           => TypReg TypRegQReg (Just (SizeNat 8))
---   QReg[n]           => TypReg TypRegQReg (Just (SizeVar "n"))
 --   [int; 4]          => TypArrayFixed (TypPrim TypPrimInt) (SizeNat 4)
 --   [int; n]          => TypArrayFixed (TypPrim TypPrimInt) (SizeVar "n")
 ------------------------------------------------------------------------------
@@ -179,11 +169,6 @@ data TypExpr : Type where
 
   -- Primitive type keyword: int, bool, float, Qubit, Bit, ...
   TypPrim : TypPrimName -> TypExpr
-
-  -- Register types: QReg or QReg[n], BReg or BReg[n]
-  TypReg : (typRegName : TypRegName)
-        -> (typLengthSizeMaybe : Maybe SizeExpr)
-        -> TypExpr
 
   -- Tuple types: (int, bool, QReg[n])
   TypTuple : List TypExpr -> TypExpr
@@ -418,7 +403,6 @@ implementation Eq Expr where
 %runElab derive "BinaryOp" [Show, Eq]
 %runElab derive "Literal" [Show, Eq]
 %runElab derive "TypPrimName" [Show, Eq]
-%runElab derive "TypRegName" [Show, Eq]
 %runElab derive "SizeExpr" [Show, Eq]
 %runElab derive "TypExpr" [Show, Eq]
 %runElab derive "Pattern" [Show, Eq]

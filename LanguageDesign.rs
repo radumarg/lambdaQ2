@@ -1,7 +1,9 @@
 // (0) Code lines are terminated by ';' like this is currently done in Rust except for function return syntax which does not end with ';', again like is the convention in Rust. Paranthesis, square brakets and curly braces follow the same rules from Rust.
 
 // (1) Types Reserved Keywords:  
-  (), angle, Bit, bool, float, int, Qubit, uint, QReg, BReg
+  (), angle, bit, bool, float, int, qubit, uint
+
+// (param?): bind value, get name let p:Param = param("theta1")
 
 // (2) Reserved Keywords: 
   as, break, ctrl, continue, else, false, fn, for, if, in, let, loop, measr, negctrl, qalloc, reset, return, true, while
@@ -192,11 +194,11 @@ let n = a.len();
 
 // (31) Other quantum specific constructs:
 
-let q: Qubit = qalloc();
-let qs: QReg[8] = qalloc(8); 
+let q: qubit = qalloc();
+let qs: [qubit; 8] = qalloc(8); 
 
-let b: Bit = measr(q);
-let bs: BReg[8] = measr(qs);
+let b: bit = measr(q);
+let bs: [bit; 8] = measr(qs);
 
 // (32) Bit can appear in conditions:
 
@@ -249,23 +251,23 @@ match b {
 // (38) Qubit allocation:
 
 qalloc() -> Qubit
-qalloc(n: uint) -> QReg[n]
+qalloc(n: uint) -> qubit[n]
 
 // (39) Reset:
 
 reset(q: Qubit) -> Qubit
-reset(qs: QReg[n]) -> QReg[n]
+reset(qs: [qubit; n]) -> [qubit; n]
 
 // (40) Measure:
 
-measr(q: Qubit) -> (Bit, Qubit)
-measr(qs: QReg[n]) -> (BReg[n], QReg[n])
+measr(q: qubit) -> (bit, qubit)
+measr(qs: [qubit; n]) -> ([bit; n], [qubit; n])
 
 // (41) An example of quantum flow:
 
-fn bell_pair() -> (Bit, Bit) {
-  let q0: Qubit = qalloc();
-  let q1: Qubit = qalloc();
+fn bell_pair() -> (bit, bit) {
+  let q0: qubit = qalloc();
+  let q1: qubit = qalloc();
 
   H(q0);
   CX(q0, q1);
@@ -280,13 +282,13 @@ fn bell_pair() -> (Bit, Bit) {
 // (42) Allocating quantum register, both notations should work: 
 
 // dynamic length
-let qs: QReg = qalloc(8);
+let qs: [qubit] = qalloc(8);
 
 // static length
-let qs: QReg[8] = qalloc(8);
+let qs: [qubit; 8] = qalloc(8);
 
 // static length alias
-let qs: [Qubit; 8] = qalloc(8); 
+let qs: [qubit; 8] = qalloc(8);
 
 
 

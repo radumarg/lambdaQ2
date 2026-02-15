@@ -221,8 +221,7 @@ lexIdentOrKeywordOrTypeOrGate startPosition charsRemaining =
       Just kw => (TokKw kw, endPosition, restChars)
       Nothing =>
         case typeFromString identString of
-          Just (Left typPrimName) => (TokTypPrim typPrimName, endPosition, restChars)
-          Just (Right typRegName) => (TokTypReg typRegName, endPosition, restChars)
+          Just typPrimName => (TokTypPrim typPrimName, endPosition, restChars)
           Nothing =>
             case gateFromString identString of
               Just gateName => (TokGate gateName, endPosition, restChars)
