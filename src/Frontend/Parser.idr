@@ -892,6 +892,7 @@ mutual
               Just (TokSym SymStarEq)   => parseAssignStmt fuel AssignMulEq lhsExpr tokensAfterExpr
               Just (TokSym SymSlashEq)  => parseAssignStmt fuel AssignDivEq lhsExpr tokensAfterExpr
               Just (TokSym SymPercentEq)=> parseAssignStmt fuel AssignRemEq lhsExpr tokensAfterExpr
+              Just (TokSym SymWalrusEq) => parseAssignStmt fuel AssignWalrusEq lhsExpr tokensAfterExpr
 
               -- Expression statement: expr ;
               Just (TokSym SymSemi) =>
@@ -1477,6 +1478,7 @@ parseTopStmt tokens =
             Just (TokSym SymStarEq)    => finishTopAssign topFuel AssignMulEq expr tokensAfterExpr
             Just (TokSym SymSlashEq)   => finishTopAssign topFuel AssignDivEq expr tokensAfterExpr
             Just (TokSym SymPercentEq) => finishTopAssign topFuel AssignRemEq expr tokensAfterExpr
+            Just (TokSym SymWalrusEq)  => finishTopAssign topFuel AssignWalrusEq expr tokensAfterExpr
 
             Just (TokSym SymSemi) =>
               case expectSymbol SymSemi tokensAfterExpr of

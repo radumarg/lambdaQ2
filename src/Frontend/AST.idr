@@ -78,6 +78,7 @@ data AssignOp : Type where
   AssignMulEq : AssignOp
   AssignDivEq : AssignOp
   AssignRemEq : AssignOp
+  AssignWalrusEq : AssignOp
 
 ------------------------------------------------------------------------------
 -- UnaryOp: prefix operators

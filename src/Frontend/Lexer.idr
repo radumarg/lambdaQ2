@@ -271,6 +271,7 @@ lexSymbol startPosition charsRemaining =
       , (unpack "*=",  SymStarEq)
       , (unpack "/=",  SymSlashEq)
       , (unpack "%=",  SymPercentEq)
+      , (unpack ":=",  SymWalrusEq)
       ]
   in
     case tryAll candidates of

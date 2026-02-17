@@ -42,7 +42,7 @@ data Symbol
   | SymBang                 -- !
   | SymEq                   -- =
   | SymPlus | SymMinus | SymStar | SymSlash | SymPercent
-  | SymPlusEq | SymMinusEq | SymStarEq | SymSlashEq | SymPercentEq
+  | SymPlusEq | SymMinusEq | SymStarEq | SymSlashEq | SymPercentEq | SymWalrusEq
   | SymGt | SymGe | SymLt | SymLe
   | SymEqEq | SymNotEq
   | SymAndAnd | SymOrOr
