@@ -1,9 +1,9 @@
-<table>
-  <tr>
-    <td style="vertical-align: middle; padding-right: 20px;">
-      <img src="files/leaf.png" alt="Leaf" width="260">
+<table style="border: none; border-collapse: collapse;">
+  <tr style="border: none;">
+    <td style="border: none; vertical-align: middle; padding-right: 20px;">
+      <img src="files/leaf.png" alt="Leaf" width="240">
     </td>
-    <td style="vertical-align: middle;">
+    <td style="border: none; vertical-align: middle;">
       <h2 style="margin: 0;">
         A Quantum Computing<br>
         Programming Language
