@@ -1,21 +1,24 @@
-<p align="center">
-  <img src="files/leaf.png" alt="Leaf" width="220">
-</p>
-
-<p align="center" style="font-size: 42px; font-weight: 400; margin-bottom: 0;">
-  A Quantum Computing<br>
-  Programming Language
-</p>
-
-<p align="center" style="margin-top: 15px;">
-  <a href="https://unitary.fund">
-    <img src="https://img.shields.io/badge/Supported%20By-UNITARY%20FUND-brightgreen.svg?style=for-the-badge" alt="Supported By Unitary Fund">
-  </a>
-</p>
-
-<br>
+<table>
+  <tr>
+    <td style="vertical-align: middle; padding-right: 20px;">
+      <img src="files/leaf.png" alt="Leaf" width="260">
+    </td>
+    <td style="vertical-align: middle;">
+      <h2 style="margin: 0;">
+        A Quantum Computing<br>
+        Programming Language
+      </h2>
+      <div style="margin-top: 10px;">
+        <a href="https://unitary.fund">
+          <img src="https://img.shields.io/badge/Supported%20By-UNITARY%20FUND-brightgreen.svg?style=for-the-badge" alt="Supported By Unitary Fund">
+        </a>
+      </div>
+    </td>
+  </tr>
+</table>
 
 ## Progress Status
+
 * Frontend (syntax based on Rust): 60%
 * Type Checker: 0%
 * Quantum Lambda Calculus (QLC) based IR (inspired by [Silq](https://files.sri.inf.ethz.ch/website/papers/pldi20-silq.pdf)): 0%
