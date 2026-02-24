@@ -1144,6 +1144,9 @@ mutual
       Just (TokKw KwAtan) =>
         parseBuiltinCall fuelLeft BuiltinAtan tokens
 
+      Just (TokKw KwBarrier) =>
+        parseBuiltinCall fuelLeft BuiltinBarrier tokens
+
       Just (TokKw KwCeil) =>
         parseBuiltinCall fuelLeft BuiltinCeil tokens
 
@@ -1357,11 +1360,13 @@ mutual
           BuiltinAcos     => KwAcos
           BuiltinAsin     => KwAsin
           BuiltinAtan     => KwAtan
+          BuiltinBarrier  => KwBarrier
           BuiltinCeil     => KwCeil
           BuiltinCos      => KwCos
           BuiltinDiscard  => KwDiscard
           BuiltinExp      => KwExp
           BuiltinFloor    => KwFloor
+          BuiltinImport   => KwImport
           BuiltinLn       => KwLn
           BuiltinLog10    => KwLog10
           BuiltinLog2     => KwLog2

@@ -19,13 +19,13 @@ import Frontend.AST
 ----------------------------------------------------------------------
 public export
 data Keyword
-  = KwAbs | KwAdjoint | KwAs | KwAcos | KwAsin | KwAtan
-  | KwBreak | KwCeil | KwCos | KwCtrl | KwContinue | KwDiscard
-  | KwElse | KwExp | KwFalse | KwFloor | KwFn | KwFor | KwIf | KwIn
-  | KwLet | KwLn | KwLog10 | KwLog2 | KwLoop
+  = KwAbs | KwAdjoint | KwAffin | KwAs | KwAcos | KwAsin | KwAtan
+  | KwBarrier |KwBreak | KwCeil | KwCos | KwCtrl | KwContinue | KwDiscard
+  | KwElse | KwExp | KwFalse | KwFloor | KwFn | KwFor | KwIf | KwImport | KwIn
+  | KwLet | KwLn | KwALin | KwLog10 | KwLog2 | KwLoop
   | KwMatch | KwMax | KwMeasr | KwMin | KwNegCtrl
   | KwPow | KwRound | KwQAlloc | KwReset | KwReturn
-  | KwSin | KwSqrt | KwTan | KwTrue | KwUncompute | KwWhile
+  | KwScratch | KwSin | KwSqrt | KwTan | KwTrue | KwUncompute | KwWhile
 
 ----------------------------------------------------------------------
 -- Symbols: punctuation and operators.
@@ -83,12 +83,14 @@ public export
 keywordFromString : String -> Maybe Keyword
 keywordFromString s =
   case s of
+    "affin"    => Just KwAffin
     "abs"      => Just KwAbs
     "adjoint"  => Just KwAdjoint
     "acos"     => Just KwAcos
     "asin"     => Just KwAsin
     "as"       => Just KwAs
     "atan"     => Just KwAtan
+    "barrier"  => Just KwBarrier
     "break"    => Just KwBreak
     "ceil"     => Just KwCeil
     "cos"      => Just KwCos
@@ -102,8 +104,10 @@ keywordFromString s =
     "fn"       => Just KwFn
     "for"      => Just KwFor
     "if"       => Just KwIf
+    "import"   => Just KwImport
     "in"       => Just KwIn
     "let"      => Just KwLet
+    "lin"      => Just KwALin
     "ln"       => Just KwLn
     "log10"    => Just KwLog10
     "log2"     => Just KwLog2
@@ -114,14 +118,15 @@ keywordFromString s =
     "min"      => Just KwMin
     "negctrl"  => Just KwNegCtrl
     "pow"      => Just KwPow
-    "round"    => Just KwRound
     "qalloc"   => Just KwQAlloc
+    "round"    => Just KwRound
     "reset"    => Just KwReset
     "return"   => Just KwReturn
     "sin"      => Just KwSin
     "sqrt"     => Just KwSqrt
     "tan"      => Just KwTan
     "true"     => Just KwTrue
+    "scratch"  => Just KwScratch
     "uncompute" => Just KwUncompute
     "while"    => Just KwWhile
     _          => Nothing

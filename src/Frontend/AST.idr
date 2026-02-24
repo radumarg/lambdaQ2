@@ -44,11 +44,13 @@ data BuiltinName
   | BuiltinAcos
   | BuiltinAsin
   | BuiltinAtan
+  | BuiltinBarrier
   | BuiltinCeil
   | BuiltinCos
   | BuiltinDiscard
   | BuiltinExp
   | BuiltinFloor
+  | BuiltinImport
   | BuiltinLn
   | BuiltinLog10
   | BuiltinLog2
