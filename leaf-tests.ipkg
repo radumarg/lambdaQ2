@@ -1,4 +1,4 @@
-package lambdaQ-tests
+package leaf-tests
 
 sourcedir = "src"
 depends = elab-util,
@@ -11,4 +11,4 @@ modules = Frontend.AST,
           Test.ParserTests
 
 main = Test.ParserTests
-executable = lambdaQ-tests
+executable = leaf-tests

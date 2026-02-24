@@ -1,4 +1,4 @@
-package lambdaQ
+package leaf
 
 sourcedir = "src"
 depends = elab-util,
@@ -21,4 +21,4 @@ modules = Main,
           Test.ParserTests
 
 main = Main
-executable = lambdaQ
+executable = leaf
