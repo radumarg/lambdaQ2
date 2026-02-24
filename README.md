@@ -2,7 +2,7 @@
   <img src="files/leaf.png" alt="Leaf" width="220">
 </p>
 
-<p align="center" style="font-size: 32px; font-weight: 400; margin-bottom: 0;">
+<p align="center" style="font-size: 42px; font-weight: 400; margin-bottom: 0;">
   A Quantum Computing<br>
   Programming Language
 </p>
