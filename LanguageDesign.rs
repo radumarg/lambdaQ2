@@ -125,12 +125,60 @@ ctrl(q0, q1) {
     // code to be executed
   }
   
-  Function returning some variable:
+//  Function returning some variable:
   
   fn f(x: int) -> int {
   	x + 1
    }
+
+  // Silq qfree -> classical
+  // Does not allocate qubits
+  // Does not apply quantum gates
+  // Does not measure
+  // Does not touch quantum state at all
+  // opt-in promise (guardrail), like "const" in C++
+  classical fn f(x: int) -> int {
+    x + 1
+  }
+
+
+  // Silq mfree -> unitary
+  // guarantees function does not perform measurement and does not depend on measured values
+  // opt-in promise (guardrail), like "const" in C++
+  unitary fn f(q: qubit) -> qubit {
+    let q = X(q);
+    let q = H(q);
+    q
+  }
+
+  // nice in public libraries: “yes, this measures”
+  // opt-in promise (guardrail), like "const" in C++
+  measures fn sample(q: qubit) -> bit {
+    measure(q)
+  }
+
   
+// At IR level:
+  data Effect
+    = Classical
+    | Unitary
+    | MayMeasure
+
+  join : Effect -> Effect -> Effect
+  join Classical   e            = e
+  join e           Classical    = e
+  join Unitary     Unitary      = Unitary
+  join Unitary     MayMeasure   = MayMeasure
+  join MayMeasure  Unitary      = MayMeasure
+  join MayMeasure  MayMeasure   = MayMeasure
+
+  Prog : Effect -> Type
+
+  compose : Prog e1 -> Prog e2 -> Prog (join e1 e2)
+  // Subtyping in an effect lattice: Classical < Unitary < MayMeasure
+  //You could even prove: Classical implies Unitary
+
+
 // (20) Variable declared in the scope of a function:
 
   fn myFunction() {
