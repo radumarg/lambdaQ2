@@ -153,7 +153,7 @@ ctrl(q0, q1) {
 
   // nice in public libraries: “yes, this measures”
   // opt-in promise (guardrail), like "const" in C++
-  measures fn sample(q: qubit) -> bit {
+  general fn sample(q: qubit) -> bit {
     measure(q)
   }
 
