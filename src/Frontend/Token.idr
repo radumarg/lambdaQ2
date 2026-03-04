@@ -20,12 +20,12 @@ import Frontend.AST
 public export
 data Keyword
   = KwAbs | KwAdjoint | KwAffin | KwAs | KwAcos | KwAsin | KwAtan
-  | KwBarrier |KwBreak | KwCeil | KwCos | KwCtrl | KwContinue | KwDiscard
-  | KwElse | KwExp | KwFalse | KwFloor | KwFn | KwFor | KwIf | KwImport | KwIn
+  | KwBarrier |KwBreak | KwCeil | KwClassical | KwCos | KwCtrl | KwContinue | KwDiscard
+  | KwElse | KwExp | KwFalse | KwFloor | KwFn | KwFor | KwGeneral | KwIf | KwImport | KwIn
   | KwLet | KwLn | KwALin | KwLog10 | KwLog2 | KwLoop
   | KwMatch | KwMax | KwMeasr | KwMin | KwNegCtrl
   | KwPow | KwRound | KwQAlloc | KwReset | KwReturn
-  | KwScratch | KwSin | KwSqrt | KwTan | KwTrue | KwUncompute | KwWhile
+  | KwScratch | KwSin | KwSqrt | KwTan | KwTrue | KwUncompute | KwUnitary | KwWhile
 
 ----------------------------------------------------------------------
 -- Symbols: punctuation and operators.
@@ -83,53 +83,56 @@ public export
 keywordFromString : String -> Maybe Keyword
 keywordFromString s =
   case s of
-    "affin"    => Just KwAffin
-    "abs"      => Just KwAbs
-    "adjoint"  => Just KwAdjoint
-    "acos"     => Just KwAcos
-    "asin"     => Just KwAsin
-    "as"       => Just KwAs
-    "atan"     => Just KwAtan
-    "barrier"  => Just KwBarrier
-    "break"    => Just KwBreak
-    "ceil"     => Just KwCeil
-    "cos"      => Just KwCos
-    "ctrl"     => Just KwCtrl
-    "continue" => Just KwContinue
-    "discard"  => Just KwDiscard
-    "else"     => Just KwElse
-    "exp"      => Just KwExp
-    "false"    => Just KwFalse
-    "floor"    => Just KwFloor
-    "fn"       => Just KwFn
-    "for"      => Just KwFor
-    "if"       => Just KwIf
-    "import"   => Just KwImport
-    "in"       => Just KwIn
-    "let"      => Just KwLet
-    "lin"      => Just KwALin
-    "ln"       => Just KwLn
-    "log10"    => Just KwLog10
-    "log2"     => Just KwLog2
-    "loop"     => Just KwLoop
-    "match"    => Just KwMatch
-    "max"      => Just KwMax
-    "measr"    => Just KwMeasr
-    "min"      => Just KwMin
-    "negctrl"  => Just KwNegCtrl
-    "pow"      => Just KwPow
-    "qalloc"   => Just KwQAlloc
-    "round"    => Just KwRound
-    "reset"    => Just KwReset
-    "return"   => Just KwReturn
-    "sin"      => Just KwSin
-    "sqrt"     => Just KwSqrt
-    "tan"      => Just KwTan
-    "true"     => Just KwTrue
-    "scratch"  => Just KwScratch
+    "affin"     => Just KwAffin
+    "abs"       => Just KwAbs
+    "adjoint"   => Just KwAdjoint
+    "acos"      => Just KwAcos
+    "asin"      => Just KwAsin
+    "as"        => Just KwAs
+    "atan"      => Just KwAtan
+    "barrier"   => Just KwBarrier
+    "break"     => Just KwBreak
+    "ceil"      => Just KwCeil
+    "classical" => Just KwClassical
+    "cos"       => Just KwCos
+    "ctrl"      => Just KwCtrl
+    "continue"  => Just KwContinue
+    "discard"   => Just KwDiscard
+    "else"      => Just KwElse
+    "exp"       => Just KwExp
+    "false"     => Just KwFalse
+    "floor"     => Just KwFloor
+    "fn"        => Just KwFn
+    "for"       => Just KwFor
+    "general"   => Just KwGeneral
+    "if"        => Just KwIf
+    "import"    => Just KwImport
+    "in"        => Just KwIn
+    "let"       => Just KwLet
+    "lin"       => Just KwALin
+    "ln"        => Just KwLn
+    "log10"     => Just KwLog10
+    "log2"      => Just KwLog2
+    "loop"      => Just KwLoop
+    "match"     => Just KwMatch
+    "max"       => Just KwMax
+    "measr"     => Just KwMeasr
+    "min"       => Just KwMin
+    "negctrl"   => Just KwNegCtrl
+    "pow"       => Just KwPow
+    "qalloc"    => Just KwQAlloc
+    "round"     => Just KwRound
+    "reset"     => Just KwReset
+    "return"    => Just KwReturn
+    "sin"       => Just KwSin
+    "sqrt"      => Just KwSqrt
+    "scratch"   => Just KwScratch
+    "tan"       => Just KwTan
+    "true"      => Just KwTrue
     "uncompute" => Just KwUncompute
-    "while"    => Just KwWhile
-    _          => Nothing
+    "unitary"   => Just KwUnitary
+    "while"     => Just KwWhile
+    _           => Nothing
 
 public export
 typeFromString : String -> Maybe TypPrimName
