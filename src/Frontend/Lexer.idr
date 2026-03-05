@@ -321,15 +321,15 @@ lexSymbol startPosition charsRemaining =
                   Left (mkBoundedHere (LexUnexpectedChar c) startPosition endPosition)
 
 --------------------------------------------------------------------------------
--- Main entry point: lexQuantum
+-- Main entry point: lexProgram
 --
 -- Produces a list of tokens, each with bounds.
 -- No silent failures: invalid characters or unterminated comments/strings
 -- return Left (Bounded LexerErr).
 --------------------------------------------------------------------------------
 public export
-lexQuantum : String -> Either (Bounded LexerErr) (List (Bounded Token))
-lexQuantum inputString =
+lexProgram : String -> Either (Bounded LexerErr) (List (Bounded Token))
+lexProgram inputString =
   let charsAll = unpack inputString
       fuel    = S (length charsAll)  -- enough steps if each iteration consumes ≥ 1 char
   in go fuel begin charsAll
