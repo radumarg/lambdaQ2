@@ -1,7 +1,7 @@
 <table>
   <tr>
     <td style="vertical-align: middle; padding-right: 20px;">
-      <img src="files/leaf.png" alt="Leaf" width="260">
+      <img src="files/leaf.png" alt="Leaf" width="390">
     </td>
     <td style="vertical-align: middle;">
       <h2 style="margin: 0;">
