@@ -6,10 +6,10 @@
 // (param?): bind value, get name let p:Param = param("theta1")
 
 // (2) Reserved Keywords: 
-  as, break, ctrl, continue, else, false, fn, for, if, in, let, loop, measr, negctrl, qalloc, reset, return, true, while
+  adjoint, affin, as, barrier, break, classical, ctrl, continue, discard, else, false, fn, for, general, if, import, in, let, lin, loop, measr, negctrl, pow, qalloc, qif, qcase, qelse, reset, return, scratch, true, unitary, uncompute, while
 
 // (3) Operators Reserved Symbols and Keywords: 
-  '?', '&', '(', ')', ',', ';', '=', '+', '-', '*', '/', '%', '+=', '-=', '*=', '/=', '%=', '>', '>=', '<', '<=', '..', '()', ':', '[', ']', '{', '}', '==', '!=', '&&', '||', '!', '.', '..=', '::', '|', '^', '->'
+  '?', '&', '(', ')', ',', ';', '=', '+', '-', '*', '/', '%', '+=', '-=', '*=', '/=', '%=', '>', '>=', '<', '<=', '..', '()', ':', '[', ']', '{', '}', '==', '!=', '&&', '||', '!', '.', '..=', '::', '|', '^', '->', ':='
 
 // (4) Quantum Gates Reserved Keywords: 
   Id, X, Y, Z, H, S, SDG, T, TDG, SX, SXDG, RX, RY, RZ, U1, U2, U3, CNOT, CY, CZ, CS, CSDG, CT, CTDG, CSX, CSXDG, CRX, CRY, CRZ, CU1, CU2, CU3, SWAP, RXX, RYY, RZZ, CCX, CSWAP, GPI, GPI2, MS
@@ -31,7 +31,7 @@ ctrl(q0, q1) H(q2);
 let (q0, q1, q2) = ctrl(q0) negctrl(q1) H(q2);
 // Alternative syntax for declaring controlled gates using booleans arguments instead of 'ctrl' and 'negtcrl':
 let (q0, q1, q2) = ctrl(q0 = true, q1 = false) H(q2);
-// Control can apply to a block og gates:
+// Control can apply to a block of gates:
 ctrl(q0, q1) {
   H(q2);
   CX(q2, q3);
@@ -46,6 +46,7 @@ ctrl(q0, q1) {
   */
 
 // (9) Variable declaration and assigment:
+// The variable type can be specified or inferred
 
   let my_var = 5;
 
@@ -158,25 +159,25 @@ ctrl(q0, q1) {
   }
 
   
-// At IR level:
-  data Effect
-    = Classical
-    | Unitary
-    | MayMeasure
+// // At IR level:
+//   data Effect
+//     = Classical
+//     | Unitary
+//     | MayMeasure
 
-  join : Effect -> Effect -> Effect
-  join Classical   e            = e
-  join e           Classical    = e
-  join Unitary     Unitary      = Unitary
-  join Unitary     MayMeasure   = MayMeasure
-  join MayMeasure  Unitary      = MayMeasure
-  join MayMeasure  MayMeasure   = MayMeasure
+//   join : Effect -> Effect -> Effect
+//   join Classical   e            = e
+//   join e           Classical    = e
+//   join Unitary     Unitary      = Unitary
+//   join Unitary     MayMeasure   = MayMeasure
+//   join MayMeasure  Unitary      = MayMeasure
+//   join MayMeasure  MayMeasure   = MayMeasure
 
-  Prog : Effect -> Type
+//   Prog : Effect -> Type
 
-  compose : Prog e1 -> Prog e2 -> Prog (join e1 e2)
-  // Subtyping in an effect lattice: Classical < Unitary < MayMeasure
-  //You could even prove: Classical implies Unitary
+//   compose : Prog e1 -> Prog e2 -> Prog (join e1 e2)
+//   // Subtyping in an effect lattice: Classical < Unitary < MayMeasure
+//   //You could even prove: Classical implies Unitary
 
 
 // (20) Variable declared in the scope of a function:
@@ -338,6 +339,111 @@ let qs: [qubit; 8] = qalloc(8);
 // static length alias
 let qs: [qubit; 8] = qalloc(8);
 
+// (43) import statements
+import "my_library.lf";
 
+// (44) barrier statement, works like OpenQasm3 barrier
+barrier(q0, q1, q2);
 
+// (45) discard statement, discards qubits without resetting them
+discard(q0);
 
+discard(qs);
+
+// (46) uncompute statement, uncomputes qubits without resetting them
+uncompute(q0);
+
+// (47) adjoint statement, applies the inverse of a block of gates
+
+adjoint {
+  H(q0);
+  CX(q0, q1);
+}
+
+let (q0, q1, q2) = adjoint (H(q0), H(q1), H(q2))
+
+let q = adjoint H(q0)
+
+let (q0, q1, q2) = adjoint f(q0, q1, q2);
+
+// (48) scratch qubit, gets uncomputed when goes out of scope. 
+// The qubit type can be specified or inferred
+let scratch q: qubit = qalloc();
+
+let scratch q = qalloc();
+
+let scratch qs: [qubit; 8] = qalloc(8);
+
+let scratch qs = qalloc(8);
+
+// (49) function annottated to contain only cassical code, no quantum operations allowed, including no qubit allocation, no quantum gates, no measurement, no dependence on measured values.
+
+  classical fn f(x: int) -> int {
+  	x + 1
+  }
+
+// (50) function annotated to contain only unitary code, no measurement allowed, including no dependence on measured values.
+
+  unitary fn f(q: qubit) -> qubit {
+    let q = X(q);
+    let q = H(q);
+    q
+  }
+
+// (51) function annotated to contain general code, can contain measurements and depend on measured values.
+
+  general fn sample(q: qubit) -> bit {
+    let q = H(q);
+    measure(q)
+  }
+
+// (52) Declaring a qubits as linear, meaning they must be used exactly once, no copying or discarding allowed. Default is linear, so the 'lin' keyword is optional.  
+
+  let lin q: qubit = qalloc();
+
+  let lin qs = qalloc(8);
+
+// (53) Declaring qubits as affine, meaning they can be used at most once, no copying allowed, but discarding is allowed.
+
+  let affin q: qubit = qalloc();
+
+  let affin qs = qalloc(8);
+
+// (54) Declaring bit strings
+
+let bs = b"10110010";
+let bs: [bit; 8] = b"10110010";
+let bs: [bit; 8] = [0, 1, 1, 0, 0, 1, 0, 0];
+
+// (55) quantum conditional statements:
+
+  qif (c) {
+    H(t);
+  } qelse {
+    X(t);
+  }
+
+  // (56) quantum case statements:
+
+  qcase ctrl {
+    0 => {
+        U0(data);
+    }
+    1 => {
+        U1(data);
+    }
+  }
+
+  qcase ctrl {
+    b"00" => { U00(data); }
+    b"01" => { U01(data); }
+    b"10" => { U10(data); }
+    b"11" => { U11(data); }
+  }
+
+  qcase ctrl {
+    0 => { U00(data); }
+    1 => { U01(data); }
+    2 => { U10(data); }
+    3 => { U11(data); }
+  }

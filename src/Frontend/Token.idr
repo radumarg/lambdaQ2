@@ -24,7 +24,7 @@ data Keyword
   | KwElse | KwExp | KwFalse | KwFloor | KwFn | KwFor | KwGeneral | KwIf | KwImport | KwIn
   | KwLet | KwLn | KwALin | KwLog10 | KwLog2 | KwLoop
   | KwMatch | KwMax | KwMeasr | KwMin | KwNegCtrl
-  | KwPow | KwRound | KwQAlloc | KwReset | KwReturn
+  | KwPow | KwRound | KwQAlloc | KwQcase | KwQelse | KwQif | KwReset | KwReturn
   | KwScratch | KwSin | KwSqrt | KwTan | KwTrue | KwUncompute | KwUnitary | KwWhile
 
 ----------------------------------------------------------------------
@@ -121,6 +121,9 @@ keywordFromString s =
     "negctrl"   => Just KwNegCtrl
     "pow"       => Just KwPow
     "qalloc"    => Just KwQAlloc
+    "qcase"     => Just KwQcase
+    "qelse"     => Just KwQelse
+    "qif"       => Just KwQif
     "round"     => Just KwRound
     "reset"     => Just KwReset
     "return"    => Just KwReturn

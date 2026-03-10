@@ -1054,6 +1054,27 @@ mutual
                           Right (elseExpr, tokensAfterElseExpr) =>
                             Right (EIf condExpr thenBlk (Just elseExpr), tokensAfterElseExpr)
 
+      -- qif cond { ... } qelse expr?
+      Just (TokKw KwQif) =>
+        case expectKeyword KwQif tokens of
+          Left err => Left err
+          Right ((), tokens1) =>
+            case parseExprPrec fuelLeft 0 tokens1 of
+              Left err => Left err
+              Right (condExpr, tokens2) =>
+                case parseBlockExprFuel fuelLeft tokens2 of
+                  Left err => Left err
+                  Right (qthenBlk, tokens3) =>
+                    case acceptKeyword KwQelse tokens3 of
+                      Left err => Left err
+                      Right (False, tokensNoQElse) =>
+                        Right (EQIf condExpr qthenBlk Nothing, tokensNoQElse)
+                      Right (True, tokensAfterQElse) =>
+                        case parseExprPrec fuelLeft 0 tokensAfterQElse of
+                          Left err => Left err
+                          Right (qelseExpr, tokensAfterQElseExpr) =>
+                            Right (EQIf condExpr qthenBlk (Just qelseExpr), tokensAfterQElseExpr)
+
       -- loop { ... }
       Just (TokKw KwLoop) =>
         case expectKeyword KwLoop tokens of

@@ -272,6 +272,12 @@ mutual
       -> (typElseBranch : Maybe Expr)
       -> Expr
 
+    -- qif condition { ... } qelse { ... }
+    EQIf : (typConditionExpr : Expr)
+      -> (typThenBlock : BlockExpr)
+      -> (typElseBranch : Maybe Expr)
+      -> Expr
+
     -- loop { ... }  (may return a value via break value)
     ELoop : BlockExpr -> Expr
 
